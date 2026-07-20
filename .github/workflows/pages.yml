@@ -16,8 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Validate production assets
+      - name: Validate generated fighter pipeline
         run: node tests/assets.mjs
+      - name: Validate named art and combat systems
+        run: node tests/named-art.mjs
       - name: Validate JavaScript game systems
         run: node tests/smoke.mjs
   deploy:

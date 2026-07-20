@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+const fail=message=>{throw new Error(message)};
+const named=fs.readFileSync('src/named-fighters.js','utf8');
+const expected=['shi-an','mei-lin','bo','hermit-reed','razor-fang','kuo','novice-jin','ghost-face'];
+for(const key of expected)if(!named.includes(`'${key}'`))fail(`Missing named fighter definition: ${key}`);
+const loader=fs.readFileSync('src/production-assets.js','utf8');
+if(!loader.includes('createNamedFighterAtlas'))fail('Named atlases are not built by the production loader.');
+const bootstrap=fs.readFileSync('src/bootstrap.js','utf8');
+if(!bootstrap.includes('loadProductionAssets'))fail('Production asset loader is not wired into bootstrap.');
+const index=fs.readFileSync('index.html','utf8');
+if(!index.includes('src/bootstrap.js'))fail('Index bypasses the production bootstrap.');
+const art=fs.readFileSync('src/art.js','utf8');
+if(!art.includes('spriteKey'))fail('Renderer does not resolve named fighter art.');
+const combat=fs.readFileSync('src/combat.js','utf8');
+for(const mechanic of ['stamina','guard','evade','throwFighter'])if(!combat.includes(mechanic))fail(`Combat mechanic missing: ${mechanic}`);
+console.log(`Named art and combat validation passed (${expected.length} fighters).`);
