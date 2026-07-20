@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Green Dragon Sprite Atlas Exporter</title><style>body{font-family:system-ui;background:#18251f;color:#f4e5bd;padding:24px}canvas{max-width:100%;background:repeating-conic-gradient(#ccd 0 25%,#eef 0 50%) 0/20px 20px;border:2px solid #dcb966;image-rendering:pixelated}button,select,input{font:inherit;margin:6px;padding:8px 12px}</style></head>
+<body>
+<h1>Fighter Atlas Exporter</h1>
+<p>The generated sheet is 2048×1024 with an 8×8 grid of 256×128 cells. Frames 0–59 are authored; 60–63 are transparent.</p>
+<label>Variant <select id="variant"><option>atlas</option><option>crimson</option><option>indigo</option><option>gold</option><option>ashen</option></select></label>
+<label>Frame <input id="frame" type="number" min="0" max="59" value="0"></label>
+<button id="sheet">Download full PNG sheet</button><button id="single">Download selected 256×128 frame</button>
+<div><canvas id="preview" width="256" height="128"></canvas></div>
+<script type="module">
+import { createFighterAtlas } from '../src/sprite-atlas.js';
+const variant=document.querySelector('#variant'),frame=document.querySelector('#frame'),preview=document.querySelector('#preview'),context=preview.getContext('2d');
+let atlas;
+function refresh(){atlas=createFighterAtlas(variant.value);const index=Math.max(0,Math.min(59,+frame.value||0));context.clearRect(0,0,256,128);context.imageSmoothingEnabled=false;context.drawImage(atlas,(index%8)*256,Math.floor(index/8)*128,256,128,0,0,256,128)}
+function save(canvas,name){const link=document.createElement('a');link.download=name;link.href=canvas.toDataURL('image/png');link.click()}
+variant.onchange=refresh;frame.oninput=refresh;document.querySelector('#sheet').onclick=()=>save(atlas,`fighter-${variant.value}-2048x1024.png`);document.querySelector('#single').onclick=()=>save(preview,`fighter-${variant.value}-${String(+frame.value).padStart(2,'0')}.png`);refresh();
+</script>
+</body></html>
