@@ -1,0 +1,12 @@
+const noop=()=>{},gradient={addColorStop:noop};
+const context=new Proxy({imageSmoothingEnabled:false,measureText:v=>({width:String(v).length*9}),createLinearGradient:()=>gradient},{get:(o,k)=>k in o?o[k]:noop,set:(o,k,v)=>(o[k]=v,true)});
+const canvas={width:960,height:540,getContext:()=>context},loading={style:{display:'block'}},progress={textContent:''};
+globalThis.document={getElementById:id=>id==='game'?canvas:id==='loading'?loading:progress,querySelectorAll:()=>[]};globalThis.window=globalThis;globalThis.addEventListener=noop;globalThis.requestAnimationFrame=()=>0;
+const saved=new Map;globalThis.localStorage={getItem:k=>saved.get(k)||null,setItem:(k,v)=>saved.set(k,String(v))};
+await import('../src/game.js');await new Promise(r=>setTimeout(r,10));
+const g=globalThis.greenDragonGame,ok=[];const check=(n,v)=>{if(!v)throw Error(`${n} failed`);ok.push(n)};
+check('boot',g&&g.mode==='title');check('loader hidden',loading.style.display==='none');g.newGame();check('new journey',g.mode==='explore'&&g.data.location==='jade-river');
+g.data.player.x=250;g.interact();check('dialogue',g.mode==='dialogue');while(g.mode==='dialogue'){g.dialogue.reveal=999;g.dialoguePress('Enter')}check('quest progression',g.quest('ashes')==='completed'&&g.quest('footprints')==='active');
+g.data.player.x=520;g.interact();while(g.mode==='dialogue'){g.dialogue.reveal=999;g.dialoguePress('Enter')}check('recruitment',g.data.party.length===1);
+g.mode='explore';g.data.player.x=760;g.interact();while(g.mode==='dialogue'){g.dialogue.reveal=999;g.dialoguePress('Enter')}check('shop',g.mode==='shop');const silver=g.data.player.silver;g.shopPress('Enter');check('purchase',g.data.player.silver<silver);
+g.mode='explore';g.data.location='mountain-trail';g.data.player.x=560;g.interact();while(g.mode==='dialogue'){g.dialogue.reveal=999;g.dialoguePress('Enter')}check('combat begins',g.mode==='combat');g.combat.player.x=420;g.combat.enemy.x=470;g.combat.enemy.hp=1;g.attack(g.combat.player,'punch');g.combat.player.actionTime=.14;g.tickFighter(g.combat.player,g.combat.enemy,.01,true);check('combat damage',g.combat.enemy.hp===0);g.updateCombat(.01);check('victory queued',g.combat.winner==='player');g.combat.resultDelay=0;g.updateCombat(.01);check('victory screen',g.mode==='victory');g.finishResult();check('quest reward',g.quest('ambush')==='completed');g.mode='menu';g.menu={tab:4,index:0};g.ctx=context;import('../src/render.js').then(m=>m.render(g));g.save();check('save',saved.has('greenDragonSave'));console.log(`Smoke test passed (${ok.length} checks)`);

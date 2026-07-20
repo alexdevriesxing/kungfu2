@@ -1,0 +1,9 @@
+export class Sound {
+  constructor(){this.ctx=null;this.on=true;this.music='';this.timer=null;this.step=0}
+  unlock(){const A=globalThis.AudioContext||globalThis.webkitAudioContext;if(!this.ctx&&A)this.ctx=new A();this.ctx?.resume?.();if(this.ctx&&this.music&&!this.timer)this.start()}
+  tone(f,d=.1,v=.05,type='square',delay=0){if(!this.ctx||!this.on)return;const t=this.ctx.currentTime+delay,o=this.ctx.createOscillator(),g=this.ctx.createGain();o.type=type;o.frequency.setValueAtTime(f,t);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(v,t+.008);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(this.ctx.destination);o.start(t);o.stop(t+d+.02)}
+  sfx(n){const m={move:[420,.04,.035,'square'],ok:[690,.07,.06,'triangle'],punch:[105,.06,.11,'square'],kick:[72,.1,.12,'sawtooth'],sword:[940,.12,.08,'triangle'],staff:[165,.09,.1,'square'],block:[130,.07,.07,'triangle'],hit:[58,.12,.12,'sawtooth'],chi:[520,.24,.08,'sine'],victory:[784,.16,.08,'triangle'],defeat:[98,.35,.08,'sawtooth']}[n]||[300,.06,.04,'square'];this.tone(...m);if(n==='victory'){this.tone(988,.18,.07,'triangle',.14);this.tone(1175,.28,.07,'triangle',.29)}if(n==='chi'){this.tone(780,.23,.06,'sine',.06);this.tone(1040,.3,.05,'sine',.12)}}
+  setMusic(n){if(this.music===n)return;this.music=n;clearInterval(this.timer);this.timer=null;this.step=0;if(this.ctx&&this.on)this.start()}
+  start(){const seq={village:[220,277,330,277,247,330,370,330],mountain:[196,247,294,392,330,294,247,220],battle:[147,196,220,147,247,220,196,165]}[this.music]||[220];const tick=()=>{const f=seq[this.step++%seq.length];this.tone(f,.22,.028,this.music==='battle'?'square':'triangle');this.tone(f/2,.29,.014,'sine')};tick();this.timer=setInterval(tick,this.music==='battle'?175:315)}
+  toggle(){this.on=!this.on;if(!this.on){clearInterval(this.timer);this.timer=null}else if(this.ctx)this.start()}
+}

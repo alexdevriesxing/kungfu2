@@ -1,0 +1,9 @@
+{
+  "name":"Kung Fu: Return of the Green Dragon Master",
+  "short_name":"Green Dragon",
+  "start_url":"./",
+  "display":"fullscreen",
+  "background_color":"#020504",
+  "theme_color":"#07110e",
+  "icons":[{"src":"assets/icon.svg","sizes":"192x192","type":"image/svg+xml"},{"src":"assets/icon.svg","sizes":"512x512","type":"image/svg+xml"}]
+}
