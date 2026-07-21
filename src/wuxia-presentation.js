@@ -30,8 +30,8 @@ function themeFor(target){
   if(id.includes('returning')||id.includes('legacy'))return THEMES.legacy;
   if(id.includes('snow')||id.includes('northern')||id.includes('lotus')||id.includes('star-pass'))return THEMES.snow;
   if(id.includes('war-camp')||id.includes('banner'))return THEMES.war;
-  if(id.includes('ghost')||id.includes('mask')||id.includes('sanctum'))return THEMES.ghost;
   if(id.includes('opera'))return THEMES.opera;
+  if(id.includes('ghost')||id.includes('mask')||id.includes('sanctum'))return THEMES.ghost;
   if(id.includes('archive'))return THEMES.archive;
   if(id.includes('capital')||id.includes('arsenal')||id.includes('throne')||id.includes('terrace')||id.includes('garden'))return THEMES.capital;
   if(id.includes('court'))return THEMES.court;
@@ -75,11 +75,19 @@ function makeParticles(target){
   while(fx.particles.length<desired){const index=fx.serial++;const seed=hash(`${target.data.location}:${index}`);fx.particles.push({x:random(seed,1)*960,y:random(seed,2)*540,depth:.45+random(seed,3)*.85,speed:8+random(seed,4)*34,phase:random(seed,5)*TAU,size:1.5+random(seed,6)*4,kind:theme.particle})}
 }
 
+function chapterForMode(mode){
+  if(mode==='act-complete')return ['ACT I COMPLETE','THE ASHES HAVE SPOKEN'];
+  if(mode==='act-two-complete')return ['ACT II COMPLETE','THE BLACK RIVER YIELDS ITS SECRETS'];
+  if(mode==='act-three-complete')return ['ACT III COMPLETE','THE CROWN BENEATH SNOW'];
+  if(mode==='act-four-complete')return ['THE MANDATE IS WRITTEN','A LEGACY NOW AWAITS'];
+  return null;
+}
+
 function updateParticles(target,dt){
   const fx=target.wuxiaFx,theme=themeFor(target);makeParticles(target);
   for(const particle of fx.particles){particle.y+=particle.speed*particle.depth*dt;particle.x+=Math.sin(target.time*.8+particle.phase)*9*dt*(particle.kind==='silk'?2:1);if(particle.kind==='ember')particle.y-=particle.speed*2.1*dt;if(particle.kind==='mist')particle.x+=particle.speed*.55*dt;if(particle.y>560){particle.y=-20;particle.x=(particle.x+173)%960}if(particle.y<-25){particle.y=555;particle.x=(particle.x+211)%960}if(particle.x>1000)particle.x=-40}
-  fx.bossIntro=Math.max(0,fx.bossIntro-dt);fx.brushTransition=Math.max(0,fx.brushTransition-dt);fx.chapterPulse=Math.max(0,fx.chapterPulse-dt);
-  fx.theme=theme;
+  if(fx.lastMode!==target.mode){const chapter=chapterForMode(target.mode);if(chapter){fx.chapterPulse=2.15;fx.chapterTitle=chapter[0];fx.chapterSubtitle=chapter[1]}fx.lastMode=target.mode}
+  fx.bossIntro=Math.max(0,fx.bossIntro-dt);fx.brushTransition=Math.max(0,fx.brushTransition-dt);fx.chapterPulse=Math.max(0,fx.chapterPulse-dt);fx.theme=theme;
 }
 
 function drawAtmosphere(target){
@@ -87,54 +95,33 @@ function drawAtmosphere(target){
   if(['title','menu','shop','train'].includes(target.mode))return;
   ctx.save();
   for(const p of fx.particles){const sway=Math.sin(target.time*1.4+p.phase)*6;ctx.globalAlpha=.12+.24*p.depth;ctx.fillStyle=p.kind==='snow'?'#eff9f4':p.kind==='ember'?'#f3a44e':p.kind==='leaf'?'#8dcc72':p.kind==='silk'?'#dd6a7e':p.kind==='ash'?'#d2c3ae':p.kind==='jade'?'#79efad':p.kind==='lantern'?'#f2bc5d':'#efabc0';if(p.kind==='mist'){ctx.globalAlpha=.055;ctx.fillStyle=theme.mist;ctx.beginPath();ctx.ellipse(p.x+sway,p.y,105*p.depth,9*p.depth,0,0,TAU);ctx.fill()}else if(p.kind==='petal'||p.kind==='leaf'||p.kind==='silk'){ctx.save();ctx.translate(p.x+sway,p.y);ctx.rotate(target.time*.8+p.phase);ctx.fillRect(-p.size,-p.size*.35,p.size*2,p.size*.7);ctx.restore()}else{ctx.beginPath();ctx.arc(p.x+sway,p.y,p.size*(p.kind==='lantern'?1.15:.55),0,TAU);ctx.fill();if(p.kind==='lantern'||p.kind==='jade'){ctx.globalAlpha*=.3;ctx.beginPath();ctx.arc(p.x+sway,p.y,p.size*3,0,TAU);ctx.fill()}}}
-  ctx.globalAlpha=1;
-  const grade=ctx.createLinearGradient(0,0,960,540);grade.addColorStop(0,rgba(theme.tint,.08));grade.addColorStop(.55,'rgba(0,0,0,0)');grade.addColorStop(1,rgba(theme.tint,.11));ctx.fillStyle=grade;ctx.fillRect(0,0,960,540);
-  ctx.restore();
+  ctx.globalAlpha=1;const grade=ctx.createLinearGradient(0,0,960,540);grade.addColorStop(0,rgba(theme.tint,.08));grade.addColorStop(.55,'rgba(0,0,0,0)');grade.addColorStop(1,rgba(theme.tint,.11));ctx.fillStyle=grade;ctx.fillRect(0,0,960,540);ctx.restore();
 }
 
 function drawFrame(target){
-  const ctx=target.ctx,theme=target.wuxiaFx.theme||themeFor(target);
-  ctx.save();
+  const ctx=target.ctx,theme=target.wuxiaFx.theme||themeFor(target);ctx.save();
   const vignette=ctx.createRadialGradient(480,260,160,480,270,590);vignette.addColorStop(.45,'rgba(0,0,0,0)');vignette.addColorStop(1,'rgba(0,0,0,.48)');ctx.fillStyle=vignette;ctx.fillRect(0,0,960,540);
   ctx.globalAlpha=.68;ctx.strokeStyle=theme.accent;ctx.lineWidth=2;ctx.strokeRect(7.5,7.5,945,525);ctx.globalAlpha=.38;ctx.strokeRect(13.5,13.5,933,513);
-  for(const [x,y,sx,sy] of [[22,22,1,1],[938,22,-1,1],[22,518,1,-1],[938,518,-1,-1]]){ctx.save();ctx.translate(x,y);ctx.scale(sx,sy);line(ctx,0,0,54,0,3,theme.accent,.75);line(ctx,0,0,0,54,3,theme.accent,.75);line(ctx,8,8,34,8,1,theme.accent,.5);line(ctx,8,8,8,34,1,theme.accent,.5);diamond(ctx,2,2,8,theme.accent,.85);ctx.restore()}
-  ctx.restore();
+  for(const [x,y,sx,sy] of [[22,22,1,1],[938,22,-1,1],[22,518,1,-1],[938,518,-1,-1]]){ctx.save();ctx.translate(x,y);ctx.scale(sx,sy);line(ctx,0,0,54,0,3,theme.accent,.75);line(ctx,0,0,0,54,3,theme.accent,.75);line(ctx,8,8,34,8,1,theme.accent,.5);line(ctx,8,8,8,34,1,theme.accent,.5);diamond(ctx,2,2,8,theme.accent,.85);ctx.restore()}ctx.restore();
 }
 
 function drawTitle(target){
-  if(target.mode!=='title')return;const ctx=target.ctx,theme=THEMES.legacy;
-  ctx.save();enso(ctx,760,282,132,'#65dc8f',.28);enso(ctx,760,282,98,'#e1bd67',.12);
+  if(target.mode!=='title')return;const ctx=target.ctx;ctx.save();enso(ctx,760,282,132,'#65dc8f',.28);enso(ctx,760,282,98,'#e1bd67',.12);
   for(let i=0;i<12;i++){const angle=target.time*.08+i/12*TAU;ctx.globalAlpha=.15;ctx.fillStyle=i%3?'#74d99a':'#e0bd68';ctx.beginPath();ctx.arc(760+Math.cos(angle)*160,282+Math.sin(angle)*105,2+(i%2),0,TAU);ctx.fill()}
-  brushStroke(ctx,48,255,354,8,'#0a1410',.72);text(ctx,'武 俠 傳 奇',226,269,15,'#d7c28e','center','serif');seal(ctx,365,244,38,'龍');
-  ctx.globalAlpha=1;ctx.restore();
+  brushStroke(ctx,48,255,354,8,'#0a1410',.72);text(ctx,'武 俠 傳 奇',226,269,15,'#d7c28e','center','serif');seal(ctx,365,244,38,'龍');ctx.globalAlpha=1;ctx.restore();
 }
 
 function drawBossIntro(target){
   const fx=target.wuxiaFx;if(!fx.bossIntro||target.mode!=='combat')return;const ctx=target.ctx,progress=clamp(fx.bossIntro/fx.bossIntroMax,0,1),open=1-Math.abs(progress-.5)*2,ease=Math.sin(clamp(open,0,1)*Math.PI/2);
-  ctx.save();ctx.fillStyle=`rgba(0,0,0,${.58*ease})`;ctx.fillRect(0,0,960,75*ease);ctx.fillRect(0,540-75*ease,960,75*ease);
-  brushStroke(ctx,150,215,660,96,'#08100d',.88*ease);line(ctx,190,226,770,226,2,fx.theme.accent,.7*ease);line(ctx,190,310,770,310,2,fx.theme.accent,.4*ease);
-  ctx.globalAlpha=ease;text(ctx,fx.bossName||'JIANGHU RIVAL',480,252,13,fx.theme.accent,'center','monospace');text(ctx,fx.bossTitle||'A NAME WRITTEN IN STEEL',480,279,34,'#f5dfaa');seal(ctx,755,272,52,fx.bossSeal||'武');ctx.restore();
+  ctx.save();ctx.fillStyle=`rgba(0,0,0,${.58*ease})`;ctx.fillRect(0,0,960,75*ease);ctx.fillRect(0,540-75*ease,960,75*ease);brushStroke(ctx,150,215,660,96,'#08100d',.88*ease);line(ctx,190,226,770,226,2,fx.theme.accent,.7*ease);line(ctx,190,310,770,310,2,fx.theme.accent,.4*ease);ctx.globalAlpha=ease;text(ctx,fx.bossName||'JIANGHU RIVAL',480,252,13,fx.theme.accent,'center','monospace');text(ctx,fx.bossTitle||'A NAME WRITTEN IN STEEL',480,279,34,'#f5dfaa');seal(ctx,755,272,52,fx.bossSeal||'武');ctx.restore();
 }
 
-function drawVictorySeal(target){
-  if(target.mode!=='victory'||!target.combat)return;const ctx=target.ctx,rank=target.combat.rank||'C';ctx.save();ctx.globalAlpha=.93;enso(ctx,815,392,64,'#ebc76d',.55);seal(ctx,815,392,74,rank);text(ctx,'VICTORY',815,474,12,'#f0d78f','center','monospace');ctx.restore();
-}
-
-function drawBrushTransition(target){
-  const amount=target.wuxiaFx.brushTransition;if(!amount)return;const ctx=target.ctx,progress=amount/target.wuxiaFx.brushTransitionMax;ctx.save();ctx.globalAlpha=Math.sin(progress*Math.PI)*.82;for(let i=0;i<13;i++){const x=(1-progress)*-1100+i*90;brushStroke(ctx,x,-10,280,560,'#07100d',.82)}ctx.restore();
-}
-
-function drawChapterPulse(target){
-  const amount=target.wuxiaFx.chapterPulse;if(!amount)return;const ctx=target.ctx,alpha=Math.sin(clamp(amount/1.8,0,1)*Math.PI);ctx.save();ctx.globalAlpha=alpha*.9;brushStroke(ctx,195,200,570,118,'#07100d',.92);text(ctx,target.wuxiaFx.chapterTitle||'THE ROAD CONTINUES',480,237,12,'#82dba5','center','monospace');text(ctx,target.wuxiaFx.chapterSubtitle||'A NEW SCROLL UNFURLS',480,276,28,'#f0d18a');ctx.restore();
-}
-
-function drawRicePaperGrain(target){
-  const ctx=target.ctx;ctx.save();ctx.globalAlpha=.025;ctx.fillStyle='#f2e4c0';const seed=Math.floor(target.time*2);for(let i=0;i<80;i++){const x=(hash(`${seed}:${i}`)%960),y=(hash(`${i}:${seed}:y`)%540);ctx.fillRect(x,y,1+(i%2),1)}ctx.restore();
-}
-
+function drawVictorySeal(target){if(target.mode!=='victory'||!target.combat)return;const ctx=target.ctx,rank=target.combat.rank||'C';ctx.save();ctx.globalAlpha=.93;enso(ctx,815,392,64,'#ebc76d',.55);seal(ctx,815,392,74,rank);text(ctx,'VICTORY',815,474,12,'#f0d78f','center','monospace');ctx.restore()}
+function drawBrushTransition(target){const amount=target.wuxiaFx.brushTransition;if(!amount)return;const ctx=target.ctx,progress=amount/target.wuxiaFx.brushTransitionMax;ctx.save();ctx.globalAlpha=Math.sin(progress*Math.PI)*.82;for(let i=0;i<13;i++){const x=(1-progress)*-1100+i*90;brushStroke(ctx,x,-10,280,560,'#07100d',.82)}ctx.restore()}
+function drawChapterPulse(target){const amount=target.wuxiaFx.chapterPulse;if(!amount)return;const ctx=target.ctx,alpha=Math.sin(clamp(amount/2.15,0,1)*Math.PI);ctx.save();ctx.globalAlpha=alpha*.9;brushStroke(ctx,195,200,570,118,'#07100d',.92);text(ctx,target.wuxiaFx.chapterTitle||'THE ROAD CONTINUES',480,237,12,'#82dba5','center','monospace');text(ctx,target.wuxiaFx.chapterSubtitle||'A NEW SCROLL UNFURLS',480,276,28,'#f0d18a');ctx.restore()}
+function drawRicePaperGrain(target){const ctx=target.ctx;ctx.save();ctx.globalAlpha=.025;ctx.fillStyle='#f2e4c0';const seed=Math.floor(target.time*2);for(let i=0;i<80;i++){const x=hash(`${seed}:${i}`)%960,y=hash(`${i}:${seed}:y`)%540;ctx.fillRect(x,y,1+(i%2),1)}ctx.restore()}
 function drawPresentation(target){decorateAllStages();drawAtmosphere(target);drawTitle(target);drawVictorySeal(target);drawBossIntro(target);drawChapterPulse(target);drawBrushTransition(target);drawFrame(target);drawRicePaperGrain(target)}
-
-function ensureState(target){target.wuxiaFx=target.wuxiaFx||{particles:[],serial:0,bossIntro:0,bossIntroMax:2.35,bossName:'',bossTitle:'',bossSeal:'武',brushTransition:0,brushTransitionMax:.86,chapterPulse:0,chapterTitle:'',chapterSubtitle:'',lastLocation:target.data?.location||''}}
+function ensureState(target){target.wuxiaFx=target.wuxiaFx||{particles:[],serial:0,bossIntro:0,bossIntroMax:2.35,bossName:'',bossTitle:'',bossSeal:'武',brushTransition:0,brushTransitionMax:.86,chapterPulse:0,chapterTitle:'',chapterSubtitle:'',lastLocation:target.data?.location||'',lastMode:target.mode}}
 
 function patch(target){
   ensureState(target);decorateAllStages();
