@@ -4,13 +4,15 @@ const mode=process.argv[2]||'runtime';
 if(mode==='static'){
   const legacy=fs.readFileSync('src/legacy-journey.js','utf8');
   for(const token of ['Hall of Returning Paths','GAUNTLETS','FIVE DRAGONS GRANDMASTER CIRCUIT','startLegacyJourney','Legacy Essence','ENDING_GIFTS','legacyRank'])if(!legacy.includes(token))fail(`Legacy feature missing: ${token}`);
+  const progression=fs.readFileSync('src/legacy-progression.js','utf8');
+  if(!progression.includes('appliedBlessings')||!progression.includes('maxHp+=10')||!progression.includes('maxChi+=6'))fail('Additive Legacy blessing progression is missing.');
   const boot=fs.readFileSync('src/bootstrap.js','utf8');
-  if(!boot.includes("import('./legacy-journey.js')"))fail('Legacy Journey module is not bootstrapped.');
+  if(!boot.includes("import('./legacy-journey.js')")||!boot.includes("import('./legacy-progression.js')"))fail('Legacy Journey modules are not fully bootstrapped.');
   if(!boot.includes('sw-legacy.js'))fail('Legacy service worker is not registered.');
   const index=fs.readFileSync('index.html','utf8');
   if(!index.includes('data-key="KeyG"'))fail('Legacy Ledger touch control is missing.');
   const sw=fs.readFileSync('sw-legacy.js','utf8');
-  if(!sw.includes('legacy-journey.js')||!sw.includes('green-dragon-v8-legacy'))fail('Legacy offline cache is incomplete.');
+  if(!sw.includes('legacy-journey.js')||!sw.includes('legacy-progression.js')||!sw.includes('green-dragon-v8-legacy'))fail('Legacy offline cache is incomplete.');
   console.log('Legacy Journey wiring validation passed.');
   process.exit(0);
 }
@@ -24,7 +26,7 @@ globalThis.window=globalThis;globalThis.addEventListener=noop;globalThis.request
 Object.defineProperty(globalThis,'navigator',{value:{getGamepads:()=>[]},configurable:true,writable:true});
 const saved=new Map;globalThis.localStorage={getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,String(value))};
 globalThis.greenDragonAssets={sprites:{},stages:{}};
-await import('../src/game.js');await import('../src/enhancements.js');await import('../src/world-systems.js');await import('../src/act-two.js');await import('../src/act-two-compat.js');await import('../src/act-three.js');await import('../src/act-four.js');await import('../src/legacy-journey.js');
+await import('../src/game.js');await import('../src/enhancements.js');await import('../src/world-systems.js');await import('../src/act-two.js');await import('../src/act-two-compat.js');await import('../src/act-three.js');await import('../src/act-four.js');await import('../src/legacy-journey.js');await import('../src/legacy-progression.js');
 const game=globalThis.greenDragonGame,api=globalThis.greenDragonLegacy,passed=[];
 const {NPCS,LOCATIONS}=await import('../src/content.js');
 const check=(name,value)=>{if(!value)fail(`${name} failed`);passed.push(name);console.log(`PASS ${name}`)};
@@ -53,7 +55,7 @@ check('gauntlet completion',game.mode==='explore'&&game.data.location==='hall-re
 finishPhase('gauntlet');
 
 game.data.legacy.essence=20;const oldHp=game.data.player.maxHp;
-check('legacy blessing purchase',api.spendBlessing(game,'vitality')&&game.data.legacy.blessings.vitality===1&&game.data.player.maxHp>=oldHp+10);
+check('legacy blessing purchase',api.spendBlessing(game,'vitality')&&game.data.legacy.blessings.vitality===1&&game.data.legacy.appliedBlessings.vitality===1&&game.data.player.maxHp>=oldHp+10);
 finishPhase('blessing');
 
 game.data.ownedWeapons=['training-staff','pale-dragon-sealblade'];game.data.learnedStyles=['Green Dragon Fist','Mandate Without Throne'];game.data.player.weapon='pale-dragon-sealblade';game.data.player.style='Mandate Without Throne';game.data.player.level=20;game.data.player.maxHp=390;game.data.player.hp=390;game.data.player.maxChi=190;game.data.player.chi=190;game.data.player.power=32;game.data.player.defence=22;game.data.player.silver=4000;game.data.party=[{id:'mei-lin',name:'Mei Lin',style:'White Crane Wing'}];game.data.bonds={'mei-lin':4};game.data.mastery={weapons:{staff:12,sword:18},styles:{'Mandate Without Throne':9}};
