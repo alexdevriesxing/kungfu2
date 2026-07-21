@@ -23,3 +23,4 @@ try{
 
 await new Promise(resolve=>setTimeout(resolve,60));
 await import('./game.js');
+await import('./enhancements.js');

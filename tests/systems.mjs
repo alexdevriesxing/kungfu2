@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+const fail=message=>{throw new Error(message)};
+const enhancements=fs.readFileSync('src/enhancements.js','utf8');
+for(const feature of ['DEFAULT_SETTINGS','DIFFICULTIES','STYLE_ARTS','QUEST_GUIDE','ownedWeapons','trackedQuest','pollGamepad','highContrast'])if(!enhancements.includes(feature))fail(`Enhanced system missing: ${feature}`);
+for(const mode of ['quests','equipment','options'])if(!enhancements.includes(`'${mode}'`))fail(`Overlay missing: ${mode}`);
+const bootstrap=fs.readFileSync('src/bootstrap.js','utf8');
+if(!bootstrap.includes("import('./enhancements.js')"))fail('Enhancement layer is not booted.');
+const index=fs.readFileSync('index.html','utf8');
+for(const key of ['KeyT','KeyR','KeyO'])if(!index.includes(`data-key="${key}"`))fail(`Mobile control missing: ${key}`);
+const workflow=fs.readFileSync('.github/workflows/pages.yml','utf8');
+if(!workflow.includes('tests/systems.mjs'))fail('Systems test is not part of deployment validation.');
+console.log('Progression, quest, equipment, accessibility and gamepad validation passed.');
