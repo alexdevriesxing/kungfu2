@@ -4,7 +4,7 @@ A web-first 2D wuxia action RPG combining free-roaming side-scrolling exploratio
 
 ## Playable campaign
 
-The current web build contains three connected acts.
+The current web build contains four connected acts and a completed main campaign.
 
 ### Act I — The Ashes Speak
 
@@ -12,15 +12,21 @@ Shi-An investigates Master Shen’s murder across Jade River Village, Golden Car
 
 ### Act II — The Black River Conspiracy
 
-Act II adds eight connected regions, nine main quests, three side stories, the Black River Escort Agency, Willow Ferry, Ghost Face Opera, the Five-Clan Council, a three-round Dragon Gate Tournament and the Imperial Jade Court finale.
-
-Major Act II rivals include Needle Crow, the Crimson Mask, Jade Mantis, Laughing Tiger, Iron Phoenix and Censor Wei “Jade Viper.”
+Eight regions connect the Black River Escort Agency, Willow Ferry, Ghost Face Opera, the Five-Clan Council, a three-round Dragon Gate Tournament and the Imperial Jade Court. Major rivals include Needle Crow, Crimson Mask, Jade Mantis, Laughing Tiger, Iron Phoenix and Censor Wei “Jade Viper.”
 
 ### Act III — Crown Beneath Snow
 
-Act III carries Shi-An into the northern war monasteries after the Jade Court archive exposes his hidden birth constellation. Eight new regions connect Northern Star Pass, Iron Prayer Monastery, Snow Lotus Village, the Red Banner War Camp, the first Ghost Face sanctum, the Celestial Archive, the vanished heir’s refuge and the Black Dragon Observatory.
+Shi-An enters the northern war monasteries after the Jade Court archive exposes his hidden birth constellation. Eight northern regions introduce three standards, faction war balance, heir trust, the Ghost Face founder, Prince Jian and Regent Han “Black Dragon.”
 
-The third act adds nine linked main quests and three side stories, three northern standards, a faction war-balance record, heir trust, the Ghost Face founder, the emperor’s vanished heir and a final confrontation with Regent Han “Black Dragon.”
+### Act IV — Mandate of Jade and Ash
+
+The northern alliance enters the capital before Chancellor Sima can erase the evidence gathered across the empire. Eight capital regions connect the refugee gate, Lantern Ward, the Hall of Ten Thousand Petitions, the Ghost Face schism, Vermilion Arsenal, imperial garden, empty throne and Green Dragon Sky Terrace.
+
+Act IV adds five required capital proofs, three side stories, a persistent mandate choice and three different epilogues:
+
+- Restore Prince Jian beneath constitutional limits
+- Establish a rotating Council of Provinces
+- Refuse a permanent throne through the Wanderer Mandate
 
 ## Living world and party systems
 
@@ -40,30 +46,35 @@ The third act adds nine linked main quests and three side stories, three norther
 
 Act II introduces the Black River Crescent Dao, Ghost Lantern Chain, Iron Phoenix Jian, Jade Viper Fang, Black River Saber, Ghost Lantern Steps and Five Banners Fist.
 
-Act III introduces:
+Act III introduces the Iron Prayer War Staff, Frost Lotus Jian, First Mask Chain, Black Dragon Edict Blade, Iron Prayer Palm, Snow Lotus Sword and Heavenly Constellation Boxing.
 
-- Iron Prayer War Staff
-- Frost Lotus Jian
-- First Mask Chain
-- Black Dragon Edict Blade
-- Iron Prayer Palm
-- Snow Lotus Sword
-- Heavenly Constellation Boxing
-- Three northern standards and war-balance tracking
-- Heir trust and the Celestial star map
-- A Northern War Council opened with **Z**
+Act IV introduces:
+
+- Capital Guardian Halberd
+- Mirror Mask Ribbon Chain
+- Vermilion Tiger Jian
+- Pale Dragon Sealblade
+- Lantern Ward Boxing
+- Mirror Mask Steps
+- Mandate Without Throne
+- Capital proofs, people support and capital renown
+- Three mandate-based final-battle bonuses
+- A Mandate Ledger opened with **Y**
+- Persistent campaign ending and `legacyReady` postgame state
 
 ## Combat
 
-Combat includes stamina, guard breaks, tap-block parries, buffered attacks, evasions, throws, weapon reach, hit-stop, knockback, impact effects, floating callouts, combo grading, victory ranks, XP, levels, mastery and party assists. Act III adds standard-based combat bonuses and a second-phase Black Dragon Regent encounter.
+Combat includes stamina, guard breaks, tap-block parries, buffered attacks, evasions, throws, weapon reach, hit-stop, knockback, impact effects, floating callouts, combo grading, victory ranks, XP, levels, mastery and party assists.
+
+Late-campaign encounters add faction-standard bonuses, multi-phase bosses and a final Chancellor Sima duel whose player bonuses depend on the selected mandate.
 
 ## Production presentation
 
-Named fighters use fixed-grid animation atlases. Acts II and III add dedicated tinted boss atlases and authored runtime pixel-art stages routed through the same production-stage interface. The deterministic renderer remains available for secondary NPCs and validation.
+Named fighters use fixed-grid animation atlases. Acts II–IV add dedicated rival variants and authored runtime pixel-art stages routed through the production-stage interface. The deterministic renderer remains available for secondary NPCs and validation.
 
 ## Web release
 
-The game is installable as a landscape progressive web app. `sw-act3.js` provides a versioned offline cache for the complete three-act executable core after the first successful load.
+The game is installable as a landscape progressive web app. `sw-act4.js` provides a versioned offline cache for the complete four-act executable core after the first successful load.
 
 ## Controls
 
@@ -78,6 +89,7 @@ The game is installable as a landscape progressive web app. `sw-act3.js` provide
 - Mastery/reputation: V
 - Act II chronicle and style selection: X
 - Northern War Council: Z
+- Mandate Ledger: Y
 - Combat: J punch, K kick, L weapon, I Chi, S block/parry, Space evade, U throw
 - Party assists: 1–4
 - Quick tonic: Q
@@ -86,6 +98,7 @@ The game is installable as a landscape progressive web app. `sw-act3.js` provide
 
 ## Documentation
 
+- [Act IV campaign](docs/ACT_FOUR.md)
 - [Act III campaign](docs/ACT_THREE.md)
 - [Act II campaign](docs/ACT_TWO.md)
 - [Living world](docs/LIVING_WORLD.md)
@@ -107,5 +120,7 @@ node tests/act-two.mjs static
 node tests/act-two.mjs runtime
 node tests/act-three.mjs static
 node tests/act-three.mjs runtime
+node tests/act-four.mjs static
+node tests/act-four.mjs runtime
 node tests/smoke.mjs
 ```
