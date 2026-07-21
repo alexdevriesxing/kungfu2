@@ -8,12 +8,12 @@ if(mode==='static'){
   if(!compat.includes('syncCommonFolk'))fail('Act II reputation compatibility is missing.');
   const boot=fs.readFileSync('src/bootstrap.js','utf8');
   if(!boot.includes("import('./act-two.js')")||!boot.includes("import('./act-two-compat.js')"))fail('Act II modules are not fully bootstrapped.');
-  const serviceWorker=fs.existsSync('sw-act3.js')?'sw-act3.js':'sw-act2.js';
+  const serviceWorker=fs.existsSync('sw-act4.js')?'sw-act4.js':fs.existsSync('sw-act3.js')?'sw-act3.js':'sw-act2.js';
   if(!boot.includes(serviceWorker))fail(`Current service worker ${serviceWorker} is not registered.`);
   const index=fs.readFileSync('index.html','utf8');
   if(!index.includes('data-key="KeyX"'))fail('Act II Chronicle touch control is missing.');
   const sw=fs.readFileSync(serviceWorker,'utf8');
-  if(!sw.includes('act-two.js')||!sw.includes('act-two-compat.js')||!/(green-dragon-v5-act2-1|green-dragon-v6-act3)/.test(sw))fail('Current offline cache does not preserve Act II.');
+  if(!sw.includes('act-two.js')||!sw.includes('act-two-compat.js')||!/(green-dragon-v5-act2-1|green-dragon-v6-act3|green-dragon-v7-act4)/.test(sw))fail('Current offline cache does not preserve Act II.');
   console.log('Act II wiring validation passed.');
   process.exit(0);
 }
