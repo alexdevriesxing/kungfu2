@@ -124,6 +124,12 @@ jobs:
         run: node tests/legacy-journey.mjs cycle
       - name: Validate Legacy enemy scaling and ending gift
         run: node tests/legacy-journey.mjs runtime
+      - name: Validate Wuxia presentation JavaScript
+        run: node --check src/wuxia-presentation.js
+      - name: Validate Wuxia presentation wiring and styling
+        run: node tests/wuxia-presentation.mjs static
+      - name: Validate Wuxia presentation runtime
+        run: node tests/wuxia-presentation.mjs runtime
       - name: Validate JavaScript game systems
         run: node tests/smoke.mjs
   deploy:
