@@ -30,6 +30,7 @@ await import('./act-two-compat.js');
 await import('./act-three.js');
 await import('./act-four.js');
 await import('./legacy-journey.js');
+await import('./legacy-progression.js');
 
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
   navigator.serviceWorker.register('./sw-legacy.js').catch(error=>console.warn('Offline cache unavailable',error));
