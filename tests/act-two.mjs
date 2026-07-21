@@ -34,11 +34,15 @@ game.newGame();game.data.quests.faceless='completed';api.unlockActTwo(game,true)
 check('act two unlock',game.data.actTwo.unlocked&&game.data.location==='black-river-docks');
 check('eight new regions',LOCATIONS.length>=14&&LOCATIONS.some(item=>item.id==='imperial-jade-court'));
 check('opening quest',game.data.quests['black-river-summons']==='active');
+finishPhase('unlock');
+
 game.afterTalk(find('captain-yan'));
 check('captain advances story',game.data.quests['broken-escort-seal']==='active');
 game.afterTalk(find('orphan-mei'));win('salt-shark');
 check('river orphan side story',game.data.quests['river-orphans']==='completed');
 check('common folk reputation',Math.max(game.data.reputation.commonfolk||0,game.data.reputation.commonFolk||0)>=2);
+finishPhase('orphans');
+
 game.afterTalk(find('clerk-pei'));
 win('needle-crow');
 check('needle crow rewards',game.data.quests['ferry-of-whispers']==='active'&&game.data.ownedWeapons.includes('black-river-dao')&&game.data.learnedStyles.includes('Black River Saber'));
