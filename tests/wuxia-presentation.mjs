@@ -45,6 +45,8 @@ const game=globalThis.greenDragonGame,api=globalThis.greenDragonWuxiaPresentatio
 const {NPCS}=await import('../src/content.js');
 const find=id=>Object.values(NPCS).flat().find(item=>item.id===id);
 const check=(name,value)=>{if(!value)fail(`${name} failed`);console.log(`PASS ${name}`)};
+let frame=game.last;
+const nextFrame=()=>game.loop(frame+=16);
 
 check('presentation api',api&&typeof api.themeFor==='function'&&typeof api.decorateAllStages==='function'&&typeof api.drawPresentation==='function');
 check('location themes',api.themeFor({data:{location:'ghost-opera-backstage'},location:()=>({background:'ghost-opera.webp'})}).particle==='silk'&&api.themeFor({data:{location:'snow-lotus-village'},location:()=>({background:'snow.webp'})}).particle==='snow'&&api.themeFor({data:{location:'hall-returning-paths'},location:()=>({background:'legacy.webp'})}).particle==='jade');
@@ -54,12 +56,12 @@ game.newGame();
 check('new journey chapter pulse',game.wuxiaFx.chapterPulse>0&&game.wuxiaFx.chapterTitle==='THE ASHES SPEAK');
 const boss=find('ghost-face');game.beginFight(boss);
 check('boss entrance state',game.wuxiaFx.bossIntro>0&&game.wuxiaFx.bossTitle===boss.name&&game.wuxiaFx.bossSeal==='戰');
-game.loop(16);
-game.mode='victory';game.combat.rank='S';game.loop(32);
+nextFrame();
+game.mode='victory';game.combat.rank='S';nextFrame();
 check('presentation renders combat and victory',game.wuxiaFx.theme&&game.wuxiaFx.theme.accent);
 game.mode='explore';game.data.location='jade-river';game.data.player.x=951;game.travel(1);
 check('brush travel transition',game.wuxiaFx.brushTransition>0);
-game.loop(48);
-game.mode='act-two-complete';game.loop(64);
+nextFrame();
+game.mode='act-two-complete';nextFrame();
 check('chapter completion presentation',game.wuxiaFx.chapterTitle==='ACT II COMPLETE'&&game.wuxiaFx.chapterPulse>0);
 console.log('Wuxia presentation runtime validation passed.');
