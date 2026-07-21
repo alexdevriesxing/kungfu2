@@ -13,48 +13,20 @@
 <body>
   <main id="game-shell">
     <canvas id="game" width="960" height="540" aria-label="Kung Fu: Return of the Green Dragon Master"></canvas>
-
-    <div id="loading" role="status" aria-live="polite">
-      <strong>Lighting the jade lanterns…</strong>
-      <div class="loading-track" aria-hidden="true"><i id="loading-fill"></i></div>
-      <span id="loading-progress">0%</span>
-    </div>
-
+    <div id="loading" role="status" aria-live="polite"><strong>Lighting the jade lanterns…</strong><div class="loading-track" aria-hidden="true"><i id="loading-fill"></i></div><span id="loading-progress">0%</span></div>
     <div id="touch-controls" aria-label="Touch controls">
-      <div class="touch-cluster movement">
-        <button data-key="KeyA" aria-label="Move left">◀</button>
-        <button data-key="KeyD" aria-label="Move right">▶</button>
-        <button data-key="KeyW" aria-label="Jump or move up">▲</button>
-        <button data-key="KeyS" aria-label="Crouch, block or move down">▼</button>
-      </div>
+      <div class="touch-cluster movement"><button data-key="KeyA" aria-label="Move left">◀</button><button data-key="KeyD" aria-label="Move right">▶</button><button data-key="KeyW" aria-label="Jump or move up">▲</button><button data-key="KeyS" aria-label="Crouch, block or move down">▼</button></div>
       <div class="touch-cluster actions">
-        <button data-key="KeyJ" aria-label="Punch">J</button>
-        <button data-key="KeyK" aria-label="Kick">K</button>
-        <button data-key="KeyL" aria-label="Weapon">L</button>
-        <button data-key="KeyI" aria-label="Chi technique">CHI</button>
-        <button data-key="Space" aria-label="Evade">↯</button>
-        <button data-key="KeyU" aria-label="Throw">GRAB</button>
-        <button data-key="KeyE" aria-label="Interact">E</button>
-        <button data-key="KeyQ" aria-label="Quick tonic">Q</button>
-        <button data-key="KeyM" aria-label="Open journal">M</button>
-        <button data-key="KeyT" aria-label="Track quests">T</button>
-        <button data-key="KeyR" aria-label="Open armory">R</button>
-        <button data-key="KeyO" aria-label="Open options">O</button>
+        <button data-key="KeyJ" aria-label="Punch">J</button><button data-key="KeyK" aria-label="Kick">K</button><button data-key="KeyL" aria-label="Weapon">L</button>
+        <button data-key="KeyI" aria-label="Chi technique">CHI</button><button data-key="Space" aria-label="Evade">↯</button><button data-key="KeyU" aria-label="Throw">GRAB</button>
+        <button data-key="KeyE" aria-label="Interact">E</button><button data-key="KeyQ" aria-label="Quick tonic">Q</button><button data-key="KeyM" aria-label="Open journal">M</button>
+        <button data-key="KeyT" aria-label="Track quests">T</button><button data-key="KeyR" aria-label="Open armory">R</button><button data-key="KeyO" aria-label="Open options">O</button>
+        <button data-key="KeyB" aria-label="Open contracts">B</button><button data-key="KeyC" aria-label="Open camp">C</button><button data-key="KeyV" aria-label="Open masteries">V</button>
       </div>
     </div>
-
-    <div id="orientation-hint" aria-hidden="true">
-      <strong>Turn the scroll sideways</strong>
-      <span>Landscape mode gives Shi-An room to fight.</span>
-    </div>
+    <div id="orientation-hint" aria-hidden="true"><strong>Turn the scroll sideways</strong><span>Landscape mode gives Shi-An room to fight.</span></div>
   </main>
-
-  <p class="assistive">
-    Keyboard: WASD or arrows to move, E to interact, M for menu, T for quest tracking,
-    R for the armory, O for accessibility and difficulty options, and F for fullscreen.
-    In battle use J punch, K kick, L weapon, I Chi technique, S block or parry,
-    Space evade and U throw. Standard gamepads are supported.
-  </p>
+  <p class="assistive">Keyboard: WASD or arrows move, E interacts, M opens the journal, T tracks quests, R opens the armory, O opens options, B opens paid contracts, C opens camp, V shows mastery, and F toggles fullscreen. Combat uses J, K, L, I, S, Space and U. Standard gamepads are supported.</p>
   <script type="module" src="src/bootstrap.js"></script>
 </body>
 </html>
