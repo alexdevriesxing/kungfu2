@@ -30,8 +30,12 @@ jobs:
         run: node tests/living-world.mjs runtime
       - name: Validate Act II wiring and offline cache
         run: node tests/act-two.mjs static
-      - name: Validate Act II unlock and expanded road
-        run: node tests/act-two.mjs unlock
+      - name: Validate Act II unlock state
+        run: node tests/act-two.mjs unlock-state
+      - name: Validate Act II region installation
+        run: node tests/act-two.mjs regions
+      - name: Validate Act II opening quest activation
+        run: node tests/act-two.mjs opening
       - name: Validate Act II river orphan side story
         run: node tests/act-two.mjs orphans
       - name: Validate Act II Needle Crow chapter
