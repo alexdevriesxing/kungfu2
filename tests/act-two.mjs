@@ -1,0 +1,54 @@
+import fs from 'node:fs';
+const fail=message=>{throw new Error(message)};
+const mode=process.argv[2]||'runtime';
+if(mode==='static'){
+  const act=fs.readFileSync('src/act-two.js','utf8');
+  for(const token of ['ACT_TWO_LOCATIONS','black-river-docks','ghost-opera-backstage','dragon-gate-arena','imperial-jade-court','censor-wei','Iron Phoenix','Black River Saber','act-two-complete'])if(!act.includes(token))fail(`Act II feature missing: ${token}`);
+  const boot=fs.readFileSync('src/bootstrap.js','utf8');
+  if(!boot.includes("import('./act-two.js')"))fail('Act II module is not bootstrapped.');
+  if(!boot.includes('sw-act2.js'))fail('Act II service worker is not registered.');
+  const index=fs.readFileSync('index.html','utf8');
+  if(!index.includes('data-key="KeyX"'))fail('Act II Chronicle touch control is missing.');
+  const sw=fs.readFileSync('sw-act2.js','utf8');
+  if(!sw.includes('act-two.js')||!sw.includes('green-dragon-v5-act2'))fail('Act II offline cache is incomplete.');
+  console.log('Act II wiring validation passed.');
+  process.exit(0);
+}
+
+const noop=()=>{},gradient={addColorStop:noop};
+const context=new Proxy({imageSmoothingEnabled:false,measureText:value=>({width:String(value).length*9}),createLinearGradient:()=>gradient},{get:(object,key)=>key in object?object[key]:noop,set:(object,key,value)=>(object[key]=value,true)});
+const canvas={width:960,height:540,getContext:()=>context,style:{}};
+const loading={style:{display:'block'}},progress={textContent:'',style:{}};
+globalThis.document={getElementById:id=>id==='game'?canvas:id==='loading'?loading:progress,querySelectorAll:()=>[],fullscreenElement:null};
+globalThis.window=globalThis;globalThis.addEventListener=noop;globalThis.requestAnimationFrame=()=>0;globalThis.navigator={getGamepads:()=>[]};
+const saved=new Map;globalThis.localStorage={getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,String(value))};
+await import('../src/game.js');await import('../src/enhancements.js');await import('../src/world-systems.js');await import('../src/act-two.js');
+const game=globalThis.greenDragonGame,api=globalThis.greenDragonActTwo,passed=[];
+const {NPCS,LOCATIONS}=await import('../src/content.js');
+const check=(name,value)=>{if(!value)fail(`${name} failed`);passed.push(name)};
+const win=id=>{const entry=Object.values(NPCS).flat().find(item=>item.id===id);game.afterTalk(entry);check(`${id} fight starts`,game.mode==='combat'&&game.combat?.npc?.id===id);game.combat.enemy.hp=0;game.mode='victory';game.finishResult()};
+
+game.newGame();game.data.quests.faceless='completed';api.unlockActTwo(game,true);
+check('act two unlock',game.data.actTwo.unlocked&&game.data.location==='black-river-docks');
+check('eight new regions',LOCATIONS.length>=14&&LOCATIONS.some(item=>item.id==='imperial-jade-court'));
+check('opening quest',game.data.quests['black-river-summons']==='active');
+game.afterTalk(NPCS['black-river-docks'].find(item=>item.id==='captain-yan'));
+check('captain advances story',game.data.quests['broken-escort-seal']==='active');
+game.afterTalk(NPCS['black-river-docks'].find(item=>item.id==='clerk-pei'));
+win('needle-crow');
+check('needle crow rewards',game.data.quests['ferry-of-whispers']==='active'&&game.data.ownedWeapons.includes('black-river-dao')&&game.data.learnedStyles.includes('Black River Saber'));
+game.afterTalk(NPCS['willow-ferry'].find(item=>item.id==='ferrymaster-yun'));
+check('ferry clue',game.data.quests['masks-behind-masks']==='active');
+game.afterTalk(NPCS['ghost-opera-quarter'].find(item=>item.id==='moon-veil'));
+win('crimson-mask');
+check('opera chapter',game.data.quests['five-clan-council']==='active'&&game.data.learnedStyles.includes('Ghost Lantern Steps'));
+game.data.reputation.commonFolk=2;
+for(const id of ['delegate-shaolin','delegate-wudang','delegate-beggars'])game.afterTalk(NPCS['five-clan-council'].find(item=>item.id===id));
+game.afterTalk(NPCS['five-clan-council'].find(item=>item.id==='grandmaster-tao'));
+check('council seals',game.data.actTwo.councilSeals.length===3&&game.data.quests['dragon-gate-qualifier']==='active');
+win('jade-mantis');win('laughing-tiger');win('iron-phoenix');
+check('tournament progression',game.data.actTwo.tournamentWins===3&&game.data.quests['jade-court-truth']==='active'&&game.data.learnedStyles.includes('Five Banners Fist'));
+game.afterTalk(NPCS['imperial-jade-court'].find(item=>item.id==='archivist-qin'));
+win('censor-wei');
+check('act two finale',game.data.actTwo.complete&&game.data.quests['jade-court-truth']==='completed'&&game.mode==='act-two-complete');
+console.log(`Act II runtime validation passed (${passed.length} checks).`);
