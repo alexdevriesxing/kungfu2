@@ -1,33 +1,60 @@
 # Kung Fu: Return of the Green Dragon Master
 
-A web-first 2D wuxia action RPG combining free-roaming side-scrolling exploration, JRPG-style interaction and responsive arcade martial-arts battles.
+A web-first 2D wuxia action RPG combining free-roaming side-scrolling exploration, JRPG interaction and responsive arcade martial-arts battles.
 
-## Playable build
+## Playable campaign
 
-The current Act I build includes six connected locations, main and side quests, five possible recruited allies, merchants, permanent training, collectible weapons, party assists, paid contracts, camp interactions, mastery progression, save migration and real-time martial-arts combat.
+The current web build now contains two connected acts.
+
+### Act I — The Ashes Speak
+
+Shi-An investigates Master Shen’s murder across Jade River Village, Golden Carp Market, Whispering Bamboo Forest, Cloud-Breaker Trail, Shaolin Monastery and Wu Dang. The act includes story quests, side stories, recruitable companions, merchants, training, weapons and the Faceless Magistrate confrontation.
+
+### Act II — The Black River Conspiracy
+
+Act II adds eight connected regions, nine main quests, three side stories, the Black River Escort Agency, Willow Ferry, Ghost Face Opera, the Five-Clan Council, a three-round Dragon Gate Tournament and the Imperial Jade Court finale.
+
+Major Act II rivals include Needle Crow, the Crimson Mask, Jade Mantis, Laughing Tiger, Iron Phoenix and Censor Wei “Jade Viper.”
 
 ## Living world and party systems
 
-- Three authored side-quest chains introduce Razor Fang, Lotus, Hermit Reed and Jin’s journey beyond Shaolin.
-- Shi-An can assemble a full five-fighter companion roster.
-- A repeatable Jianghu Contract Board provides level-scaled missions, silver, XP and reputation.
-- Camp rest restores the party and grants a focused opening to the next duel.
-- Tea conversations build companion bonds; higher bonds improve assists and unlock character-specific support effects.
-- Weapon and fighting-style mastery grow through victories and improve combat statistics.
-- Common Folk, Shaolin, Wanderer and Merchant reputation records Shi-An’s standing in the jianghu.
-- Location discoveries, contract streaks and mastery are saved safely alongside existing version 3 data.
+- Five possible recruited companions
+- Companion bonds and specialized assists
+- Repeatable Jianghu contracts
+- Camp rest and tea conversations
+- Weapon and style mastery
+- Reputation and discovery records
+- Persistent owned-weapon armory
+- Quest tracking and directional guidance
+- Disciple, Master and Legend difficulty
+- Gamepad, touch and keyboard controls
+- Accessibility settings and safe save enrichment
 
-## Progression and accessibility
+## Act II progression
 
-The build also includes a persistent armory, selectable quest tracking, directional objective guidance, Disciple/Master/Legend difficulty, screen-effect and text-speed controls, high contrast, gamepad support, style-specific Chi techniques and distinct rival combat profiles.
+The second act introduces:
 
-## Combat polish
+- Black River Crescent Dao
+- Ghost Lantern Chain
+- Iron Phoenix Jian
+- Jade Viper Fang
+- Black River Saber
+- Ghost Lantern Steps
+- Five Banners Fist
+- Clan influence and tournament progress
+- An Act II chronicle opened with **X**
 
-Combat includes stamina, guard breaks, tap-block parries, buffered attacks, evasions, throws, weapon reach, hit-stop, knockback, impact particles, floating callouts, combo grading, victory ranks, XP, levels and party assists.
+## Combat
 
-## Web release features
+Combat includes stamina, guard breaks, tap-block parries, buffered attacks, evasions, throws, weapon reach, hit-stop, knockback, impact effects, floating callouts, combo grading, victory ranks, XP, levels, mastery and party assists.
 
-The static web build is installable and caches its core files through a versioned service worker for offline replay after the first successful load. GitHub Pages deployment is gated by automated asset, gameplay, systems and living-world validation.
+## Production presentation
+
+Named fighters use fixed-grid animation atlases. Act II adds dedicated tinted boss atlases and eight authored runtime pixel-art stages routed through the same production-stage interface. The deterministic renderer remains available for secondary NPCs and validation.
+
+## Web release
+
+The game is installable as a landscape progressive web app. `sw-act2.js` provides a versioned offline cache for the complete executable core after the first successful load.
 
 ## Controls
 
@@ -37,15 +64,24 @@ The static web build is installable and caches its core files through a versione
 - Quest tracker: T
 - Armory: R
 - Options/accessibility: O
-- Contract Board: B
+- Contracts: B
 - Camp: C
-- Mastery and reputation: V
+- Mastery/reputation: V
+- Act II chronicle and style selection: X
 - Combat: J punch, K kick, L weapon, I Chi, S block/parry, Space evade, U throw
 - Party assists: 1–4
 - Quick tonic: Q
 - Sound: P
 - Fullscreen: F
-- Standard browser gamepads are supported
+
+## Documentation
+
+- [Act II campaign](docs/ACT_TWO.md)
+- [Living world](docs/LIVING_WORLD.md)
+- [Journey systems](docs/JOURNEY_SYSTEMS.md)
+- [Production art](docs/PRODUCTION_ART.md)
+- [Asset pipeline](docs/ASSET_PIPELINE.md)
+- [Polish systems](docs/POLISH.md)
 
 ## Validate
 
@@ -54,6 +90,9 @@ node tests/assets.mjs
 node tests/named-art.mjs
 node tests/polish.mjs
 node tests/systems.mjs
-node tests/living-world.mjs
+node tests/living-world.mjs static
+node tests/living-world.mjs runtime
+node tests/act-two.mjs static
+node tests/act-two.mjs runtime
 node tests/smoke.mjs
 ```

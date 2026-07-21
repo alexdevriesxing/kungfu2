@@ -25,7 +25,9 @@ await new Promise(resolve=>setTimeout(resolve,60));
 await import('./game.js');
 await import('./enhancements.js');
 await import('./world-systems.js');
+await import('./act-two.js');
+await import('./act-two-compat.js');
 
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
-  navigator.serviceWorker.register('./sw.js').catch(error=>console.warn('Offline cache unavailable',error));
+  navigator.serviceWorker.register('./sw-act2.js').catch(error=>console.warn('Offline cache unavailable',error));
 }
