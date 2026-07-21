@@ -30,7 +30,7 @@ if(!index.includes('loading-fill'))fail('Loading presentation has no visual prog
 for(const key of ['KeyQ','KeyM','KeyI','KeyU'])if(!index.includes(`data-key="${key}"`))fail(`Touch control missing: ${key}`);
 
 const css=read('styles.css');
-if(!css.includes('grid-template-columns:repeat(3'))fail('Mobile combat controls are not arranged as a three-column action pad.');
-if(!css.includes('orientation-hint'))fail('Portrait-orientation guidance is missing.');
+if(!css.includes('grid-template-columns:repeat(4'))fail('Premium mobile action controls are not arranged as a four-column wuxia pad.');
+for(const feature of ['orientation-hint','ambientSilk','clip-path:polygon','--cinnabar'])if(!css.includes(feature))fail(`Wuxia shell polish missing: ${feature}`);
 
 console.log('Polish validation passed.');

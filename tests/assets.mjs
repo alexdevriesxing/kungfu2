@@ -51,9 +51,10 @@ check(JSON.stringify(metadata.animations) === JSON.stringify(atlas.animations), 
 
 const art = fs.readFileSync(path.join(root, 'src/art.js'), 'utf8');
 const render = fs.readFileSync(path.join(root, 'src/render.js'), 'utf8');
-check(art.includes("'#719aa0'"), 'Daylight sky palette is missing');
-check(art.includes("'#e7bd78'"), 'Warm daylight horizon palette is missing');
-check(art.includes("'rgba(40,55,48,.12)'"), 'Light atmospheric fog policy is missing');
+check(art.includes("'#6d9795'"), 'Ink-wash daylight sky palette is missing');
+check(art.includes("'#e1bd78'"), 'Warm parchment horizon palette is missing');
+check(art.includes("'rgba(25,43,36,.2)'"), 'Layered atmospheric fog policy is missing');
+check(art.includes('ornatePath') && art.includes('inkMountain'), 'Premium wuxia canvas framing is missing');
 check(render.includes("rgba(0,0,0,.03)"), 'World readability tint must remain at three percent');
 check(!render.includes("rect(c,0,0,W,H,'rgba(0,0,0,.08)');for(const n"), 'Old eight-percent world dark wash returned');
 
