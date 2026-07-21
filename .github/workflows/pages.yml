@@ -8,6 +8,8 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  issues: write
+  pull-requests: write
 concurrency:
   group: pages-${{ github.ref }}
   cancel-in-progress: true
@@ -36,15 +38,15 @@ jobs:
         id: act2debug
         continue-on-error: true
         run: node tests/act-two-debug.mjs
-      - name: Extract Act II diagnostic
-        id: act2diag
-        if: always()
+      - name: Post Act II diagnostic to pull request
+        if: steps.act2debug.outcome == 'failure' && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          message=$(tr '\n' ' ' < act-two-debug.txt | tr -cd '[:alnum:] ._()/-' | cut -c1-150)
-          echo "message=$message" >> "$GITHUB_OUTPUT"
-      - name: "Act II diagnostic - ${{ steps.act2diag.outputs.message }}"
-        if: always()
-        run: echo "${{ steps.act2diag.outputs.message }}"
+          printf '### Act II initialization diagnostic\n\n```text\n' > act-two-comment.md
+          cat act-two-debug.txt >> act-two-comment.md
+          printf '\n```\n' >> act-two-comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" --body-file act-two-comment.md
       - name: Require Act II initialization
         if: always()
         run: test "${{ steps.act2debug.outcome }}" = "success"
