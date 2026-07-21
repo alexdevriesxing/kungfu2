@@ -28,6 +28,7 @@ const {NPCS,LOCATIONS}=await import('../src/content.js');
 const check=(name,value)=>{if(!value)fail(`${name} failed`);passed.push(name);console.log(`PASS ${name}`)};
 const find=id=>Object.values(NPCS).flat().find(item=>item.id===id);
 const win=id=>{const entry=find(id);game.afterTalk(entry);check(`${id} fight starts`,game.mode==='combat'&&game.combat?.npc?.id===id);game.combat.enemy.hp=0;game.mode='victory';game.finishResult()};
+const finishPhase=phase=>{if(mode===phase){console.log(`Act II ${phase} validation passed (${passed.length} checks).`);process.exit(0)}};
 
 game.newGame();game.data.quests.faceless='completed';api.unlockActTwo(game,true);
 check('act two unlock',game.data.actTwo.unlocked&&game.data.location==='black-river-docks');
@@ -41,14 +42,20 @@ check('common folk reputation',Math.max(game.data.reputation.commonfolk||0,game.
 game.afterTalk(find('clerk-pei'));
 win('needle-crow');
 check('needle crow rewards',game.data.quests['ferry-of-whispers']==='active'&&game.data.ownedWeapons.includes('black-river-dao')&&game.data.learnedStyles.includes('Black River Saber'));
+finishPhase('river');
+
 game.afterTalk(find('ferrymaster-yun'));
 check('ferry clue',game.data.quests['masks-behind-masks']==='active');
 game.afterTalk(find('moon-veil'));
 win('crimson-mask');
 check('opera chapter',game.data.quests['five-clan-council']==='active'&&game.data.learnedStyles.includes('Ghost Lantern Steps'));
+finishPhase('opera');
+
 for(const id of ['delegate-shaolin','delegate-wudang','delegate-beggars'])game.afterTalk(find(id));
 game.afterTalk(find('grandmaster-tao'));
 check('council seals',game.data.actTwo.councilSeals.length===3&&game.data.quests['dragon-gate-qualifier']==='active');
+finishPhase('council');
+
 win('jade-mantis');win('laughing-tiger');win('iron-phoenix');
 check('tournament progression',game.data.actTwo.tournamentWins===3&&game.data.quests['jade-court-truth']==='active'&&game.data.learnedStyles.includes('Five Banners Fist'));
 game.afterTalk(find('archivist-qin'));
