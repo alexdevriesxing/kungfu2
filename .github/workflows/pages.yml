@@ -32,6 +32,19 @@ jobs:
         run: node tests/act-two.mjs static
       - name: Validate Act II JavaScript syntax
         run: node --check src/act-two.js
+      - name: Capture Act II initialization diagnostics
+        id: act2debug
+        continue-on-error: true
+        run: node tests/act-two-debug.mjs
+      - name: Upload Act II diagnostic
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: act-two-debug
+          path: act-two-debug.txt
+      - name: Require Act II initialization
+        if: always()
+        run: test "${{ steps.act2debug.outcome }}" = "success"
       - name: Validate Act II module API
         run: node tests/act-two.mjs module
       - name: Validate Act II fresh-save enrichment
