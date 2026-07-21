@@ -36,9 +36,15 @@ jobs:
         id: act2debug
         continue-on-error: true
         run: node tests/act-two-debug.mjs
-      - name: "Act II diagnostic ${{ steps.act2debug.outputs.status }} - ${{ steps.act2debug.outputs.message }}"
+      - name: Extract Act II diagnostic
+        id: act2diag
         if: always()
-        run: echo "${{ steps.act2debug.outputs.message }}"
+        run: |
+          message=$(tr '\n' ' ' < act-two-debug.txt | tr -cd '[:alnum:] ._()/-' | cut -c1-150)
+          echo "message=$message" >> "$GITHUB_OUTPUT"
+      - name: "Act II diagnostic - ${{ steps.act2diag.outputs.message }}"
+        if: always()
+        run: echo "${{ steps.act2diag.outputs.message }}"
       - name: Require Act II initialization
         if: always()
         run: test "${{ steps.act2debug.outcome }}" = "success"
