@@ -22,6 +22,8 @@ jobs:
         run: node tests/named-art.mjs
       - name: Validate feel and UX polish
         run: node tests/polish.mjs
+      - name: Validate progression, quest and accessibility systems
+        run: node tests/systems.mjs
       - name: Validate JavaScript game systems
         run: node tests/smoke.mjs
   deploy:
