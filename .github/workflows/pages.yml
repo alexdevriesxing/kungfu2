@@ -106,6 +106,24 @@ jobs:
         run: node tests/act-four.mjs choice
       - name: Validate Act IV chancellor finale
         run: node tests/act-four.mjs runtime
+      - name: Validate Legacy Journey wiring and offline cache
+        run: node tests/legacy-journey.mjs static
+      - name: Validate Legacy Journey JavaScript module
+        run: node --check src/legacy-journey.js
+      - name: Validate Legacy Journey module API
+        run: node tests/legacy-journey.mjs module
+      - name: Validate Legacy Journey save enrichment
+        run: node tests/legacy-journey.mjs fresh-save
+      - name: Validate Legacy Hall unlock
+        run: node tests/legacy-journey.mjs hall
+      - name: Validate Legacy boss gauntlet
+        run: node tests/legacy-journey.mjs gauntlet
+      - name: Validate permanent Legacy blessings
+        run: node tests/legacy-journey.mjs blessing
+      - name: Validate New Game Plus inheritance
+        run: node tests/legacy-journey.mjs cycle
+      - name: Validate Legacy enemy scaling and ending gift
+        run: node tests/legacy-journey.mjs runtime
       - name: Validate JavaScript game systems
         run: node tests/smoke.mjs
   deploy:
@@ -120,7 +138,7 @@ jobs:
       - name: Assemble static game
         run: |
           mkdir -p _site
-          cp index.html styles.css manifest.webmanifest sw.js sw-act2.js sw-act3.js sw-act4.js _site/
+          cp index.html styles.css manifest.webmanifest sw.js sw-act2.js sw-act3.js sw-act4.js sw-legacy.js _site/
           cp -R src assets _site/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
