@@ -6,11 +6,12 @@ if(mode==='static'){
   for(const token of ['ACT_THREE_LOCATIONS','northern-pass','ghost-founder-sanctum','black-dragon-observatory','regent-han','Father No-Face','Heavenly Constellation Boxing','act-three-complete'])if(!act.includes(token))fail(`Act III feature missing: ${token}`);
   const boot=fs.readFileSync('src/bootstrap.js','utf8');
   if(!boot.includes("import('./act-three.js')"))fail('Act III module is not bootstrapped.');
-  if(!boot.includes('sw-act3.js'))fail('Act III service worker is not registered.');
+  const swPath=boot.includes('sw-act4.js')?'sw-act4.js':'sw-act3.js';
+  if(!boot.includes(swPath))fail('Act III-compatible service worker is not registered.');
   const index=fs.readFileSync('index.html','utf8');
   if(!index.includes('data-key="KeyZ"'))fail('Northern War Council touch control is missing.');
-  const sw=fs.readFileSync('sw-act3.js','utf8');
-  if(!sw.includes('act-three.js')||!sw.includes('green-dragon-v6-act3'))fail('Act III offline cache is incomplete.');
+  const sw=fs.readFileSync(swPath,'utf8');
+  if(!sw.includes('act-three.js')||!(sw.includes('green-dragon-v6-act3')||sw.includes('green-dragon-v7-act4')))fail('Act III offline cache is incomplete.');
   console.log('Act III wiring validation passed.');
   process.exit(0);
 }

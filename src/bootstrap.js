@@ -28,7 +28,8 @@ await import('./world-systems.js');
 await import('./act-two.js');
 await import('./act-two-compat.js');
 await import('./act-three.js');
+await import('./act-four.js');
 
 if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
-  navigator.serviceWorker.register('./sw-act3.js').catch(error=>console.warn('Offline cache unavailable',error));
+  navigator.serviceWorker.register('./sw-act4.js').catch(error=>console.warn('Offline cache unavailable',error));
 }
