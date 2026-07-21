@@ -4,13 +4,15 @@ const mode=process.argv[2]||'runtime';
 if(mode==='static'){
   const act=fs.readFileSync('src/act-two.js','utf8');
   for(const token of ['ACT_TWO_LOCATIONS','black-river-docks','ghost-opera-backstage','dragon-gate-arena','imperial-jade-court','censor-wei','Iron Phoenix','Black River Saber','act-two-complete'])if(!act.includes(token))fail(`Act II feature missing: ${token}`);
+  const compat=fs.readFileSync('src/act-two-compat.js','utf8');
+  if(!compat.includes('syncCommonFolk'))fail('Act II reputation compatibility is missing.');
   const boot=fs.readFileSync('src/bootstrap.js','utf8');
-  if(!boot.includes("import('./act-two.js')"))fail('Act II module is not bootstrapped.');
+  if(!boot.includes("import('./act-two.js')")||!boot.includes("import('./act-two-compat.js')"))fail('Act II modules are not fully bootstrapped.');
   if(!boot.includes('sw-act2.js'))fail('Act II service worker is not registered.');
   const index=fs.readFileSync('index.html','utf8');
   if(!index.includes('data-key="KeyX"'))fail('Act II Chronicle touch control is missing.');
   const sw=fs.readFileSync('sw-act2.js','utf8');
-  if(!sw.includes('act-two.js')||!sw.includes('green-dragon-v5-act2'))fail('Act II offline cache is incomplete.');
+  if(!sw.includes('act-two.js')||!sw.includes('act-two-compat.js')||!sw.includes('green-dragon-v5-act2-1'))fail('Act II offline cache is incomplete.');
   console.log('Act II wiring validation passed.');
   process.exit(0);
 }
@@ -23,7 +25,7 @@ globalThis.document={getElementById:id=>id==='game'?canvas:id==='loading'?loadin
 globalThis.window=globalThis;globalThis.addEventListener=noop;globalThis.requestAnimationFrame=()=>0;
 Object.defineProperty(globalThis,'navigator',{value:{getGamepads:()=>[]},configurable:true,writable:true});
 const saved=new Map;globalThis.localStorage={getItem:key=>saved.get(key)||null,setItem:(key,value)=>saved.set(key,String(value))};
-await import('../src/game.js');await import('../src/enhancements.js');await import('../src/world-systems.js');await import('../src/act-two.js');
+await import('../src/game.js');await import('../src/enhancements.js');await import('../src/world-systems.js');await import('../src/act-two.js');await import('../src/act-two-compat.js');
 const game=globalThis.greenDragonGame,api=globalThis.greenDragonActTwo,passed=[];
 const {NPCS,LOCATIONS}=await import('../src/content.js');
 const check=(name,value)=>{if(!value)fail(`${name} failed`);passed.push(name);console.log(`PASS ${name}`)};
@@ -50,7 +52,7 @@ game.afterTalk(find('captain-yan'));
 check('captain advances story',game.data.quests['broken-escort-seal']==='active');
 game.afterTalk(find('orphan-mei'));win('salt-shark');
 check('river orphan side story',game.data.quests['river-orphans']==='completed');
-check('common folk reputation',Math.max(game.data.reputation.commonfolk||0,game.data.reputation.commonFolk||0)>=2);
+check('common folk reputation',game.data.reputation.commonfolk>=2&&game.data.reputation.commonFolk===game.data.reputation.commonfolk);
 finishPhase('orphans');
 
 game.afterTalk(find('clerk-pei'));
