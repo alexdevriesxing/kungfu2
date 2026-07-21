@@ -30,7 +30,11 @@ jobs:
         run: node tests/living-world.mjs runtime
       - name: Validate Act II wiring and offline cache
         run: node tests/act-two.mjs static
-      - name: Validate Act II Black River chapter
+      - name: Validate Act II unlock and expanded road
+        run: node tests/act-two.mjs unlock
+      - name: Validate Act II river orphan side story
+        run: node tests/act-two.mjs orphans
+      - name: Validate Act II Needle Crow chapter
         run: node tests/act-two.mjs river
       - name: Validate Act II Ghost Face Opera chapter
         run: node tests/act-two.mjs opera
