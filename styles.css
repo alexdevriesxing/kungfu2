@@ -1,121 +1,165 @@
 :root{
   color-scheme:dark;
-  --gold:#d7ad58;
-  --jade:#46c278;
-  --ink:#040807;
-  --panel:#08120f;
+  --gold:#e4be69;
+  --gold-deep:#8b642d;
+  --jade:#65d994;
+  --jade-deep:#173f31;
+  --ink:#020605;
+  --panel:#07110e;
+  --paper:#f3dfb0;
+  --cinnabar:#a73432;
   --safe-bottom:max(12px,env(safe-area-inset-bottom));
 }
 *{box-sizing:border-box}
-html,body{
-  margin:0;
-  min-height:100%;
-  background:radial-gradient(circle at 50% 12%,#243a30 0,#101b17 30%,#020504 72%),#020504;
-  font-family:Georgia,"Times New Roman",serif;
-  overflow:hidden;
+html,body{margin:0;min-height:100%;background:#020504;font-family:Georgia,"Times New Roman",serif;overflow:hidden}
+body{
+  position:relative;
+  display:grid;
+  place-items:center;
+  padding:0;
+  background:
+    radial-gradient(circle at 50% 8%,#365748 0,#15271f 24%,#08100d 51%,#010302 82%),
+    linear-gradient(135deg,#07110d,#020403);
 }
-body{display:grid;place-items:center;padding:0}
+body::before{
+  content:"";
+  position:fixed;
+  inset:-10%;
+  pointer-events:none;
+  opacity:.34;
+  background:
+    radial-gradient(ellipse at 18% 32%,#7bd49a22 0 1px,transparent 2px),
+    radial-gradient(ellipse at 82% 22%,#e6bd6b22 0 1px,transparent 2px),
+    repeating-linear-gradient(112deg,transparent 0 31px,#e6d7b806 32px 33px,transparent 34px 65px);
+  filter:blur(.2px);
+  animation:ambientSilk 28s linear infinite;
+}
+body::after{
+  content:"武俠 · GREEN DRAGON · 江湖";
+  position:fixed;
+  left:50%;
+  bottom:1.1vh;
+  transform:translateX(-50%);
+  color:#d8bd7f66;
+  font:600 clamp(8px,.75vw,12px) ui-monospace,monospace;
+  letter-spacing:.48em;
+  white-space:nowrap;
+  pointer-events:none;
+}
 #game-shell{
   position:relative;
-  width:min(100vw,177.777vh);
-  height:min(56.25vw,100vh);
+  width:min(96vw,170.666vh);
+  height:min(54vw,96vh);
   max-width:1920px;
   max-height:1080px;
   background:#000;
-  box-shadow:0 0 0 2px #6e5129,0 0 0 6px #07100c,0 0 80px #000;
+  border:1px solid #e2bd6877;
+  box-shadow:
+    0 0 0 3px #09150f,
+    0 0 0 5px #8e6932,
+    0 0 0 9px #040807,
+    0 30px 95px #000,
+    0 0 100px #63d98e18;
   overflow:hidden;
   isolation:isolate;
+  clip-path:polygon(0 12px,12px 0,calc(100% - 12px) 0,100% 12px,100% calc(100% - 12px),calc(100% - 12px) 100%,12px 100%,0 calc(100% - 12px));
+}
+#game-shell::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  background:
+    linear-gradient(135deg,#e3bd6d55 0 2px,transparent 2px 28px,#e3bd6d22 29px 30px,transparent 31px) top left/86px 86px no-repeat,
+    linear-gradient(225deg,#e3bd6d55 0 2px,transparent 2px 28px,#e3bd6d22 29px 30px,transparent 31px) top right/86px 86px no-repeat,
+    linear-gradient(45deg,#e3bd6d55 0 2px,transparent 2px 28px,#e3bd6d22 29px 30px,transparent 31px) bottom left/86px 86px no-repeat,
+    linear-gradient(315deg,#e3bd6d55 0 2px,transparent 2px 28px,#e3bd6d22 29px 30px,transparent 31px) bottom right/86px 86px no-repeat;
+  mix-blend-mode:screen;
 }
 #game-shell::after{
   content:"";
   position:absolute;
   inset:0;
   pointer-events:none;
-  box-shadow:inset 0 0 45px #0009,inset 0 0 0 1px #d7ad5844;
+  box-shadow:inset 0 0 68px #000b,inset 0 0 0 1px #edca7940,inset 0 -38px 70px #02050466;
   z-index:4;
 }
-canvas{
-  width:100%;
-  height:100%;
-  display:block;
-  image-rendering:pixelated;
-  image-rendering:crisp-edges;
-  background:#020504;
-  touch-action:none;
-}
+canvas{width:100%;height:100%;display:block;image-rendering:pixelated;image-rendering:crisp-edges;background:#020504;touch-action:none;filter:saturate(1.08) contrast(1.045)}
 #loading{
   position:absolute;
   inset:0;
   display:grid;
   place-content:center;
   justify-items:center;
-  gap:.8rem;
+  gap:1rem;
   text-align:center;
-  background:linear-gradient(#030807e8,#030807f5),repeating-linear-gradient(45deg,#102219 0 12px,#0a1711 12px 24px);
+  background:
+    radial-gradient(circle at 70% 30%,#4d826344 0 6%,transparent 30%),
+    linear-gradient(115deg,#020605f2,#0b1812f5 52%,#020504f4),
+    repeating-linear-gradient(45deg,#102219 0 12px,#0a1711 12px 24px);
   color:var(--gold);
-  letter-spacing:.08em;
+  letter-spacing:.12em;
   font-size:clamp(14px,2vw,25px);
   z-index:10;
+  overflow:hidden;
 }
-#loading strong{text-shadow:0 2px 0 #000,0 0 20px #7fdc9566}
-#loading span{color:var(--jade);font:600 .65em ui-monospace,monospace}
-.loading-track{
-  width:min(46vw,360px);
-  height:10px;
-  padding:2px;
-  border:1px solid #9a753d;
-  background:#020504;
-  box-shadow:inset 0 0 7px #000;
+#loading::before{
+  content:"龍";
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-61%);
+  color:#79dca012;
+  font:bold min(43vw,43vh) serif;
+  line-height:1;
+  text-shadow:0 0 70px #58c78022;
 }
-.loading-track i{
-  display:block;
-  width:0;
-  height:100%;
-  background:linear-gradient(90deg,#24583a,#64db86,#e0bd63);
-  box-shadow:0 0 12px #64db86aa;
-  transition:width .15s linear;
+#loading::after{
+  content:"RETURN OF THE GREEN DRAGON MASTER";
+  color:#dbc48677;
+  font:600 clamp(8px,.8vw,12px) ui-monospace,monospace;
+  letter-spacing:.42em;
 }
+#loading strong{position:relative;text-shadow:0 2px 0 #000,0 0 28px #7fdc9588;font-weight:500}
+#loading strong::before,#loading strong::after{content:"◆";color:#a53b35;margin:0 .7em;text-shadow:none}
+#loading span{position:relative;color:var(--jade);font:600 .65em ui-monospace,monospace}
+.loading-track{position:relative;width:min(46vw,390px);height:12px;padding:2px;border:1px solid #c79b4f;background:#020504;box-shadow:inset 0 0 9px #000,0 0 0 3px #08120e,0 0 20px #65db8722}
+.loading-track::before,.loading-track::after{content:"";position:absolute;top:50%;width:8px;height:8px;background:#a63832;transform:translateY(-50%) rotate(45deg)}
+.loading-track::before{left:-14px}.loading-track::after{right:-14px}
+.loading-track i{display:block;width:0;height:100%;background:linear-gradient(90deg,#1a4d34,#66dd8a 48%,#efd17a);box-shadow:0 0 16px #64db86bb;transition:width .15s linear}
 #touch-controls{position:absolute;inset:0;pointer-events:none;display:none;z-index:5}
-.touch-cluster{position:absolute;bottom:var(--safe-bottom);display:grid;gap:clamp(5px,1vw,9px);pointer-events:auto}
-.movement{left:max(12px,env(safe-area-inset-left));grid-template-columns:repeat(2,clamp(44px,7vw,58px))}
-.actions{right:max(12px,env(safe-area-inset-right));grid-template-columns:repeat(3,clamp(42px,6.5vw,55px))}
+.touch-cluster{position:absolute;bottom:var(--safe-bottom);display:grid;gap:clamp(4px,.75vw,8px);pointer-events:auto}
+.movement{left:max(12px,env(safe-area-inset-left));grid-template-columns:repeat(2,clamp(42px,6.2vw,57px));transform:rotate(-2deg)}
+.actions{right:max(12px,env(safe-area-inset-right));grid-template-columns:repeat(4,clamp(38px,5.7vw,52px));max-width:min(38vw,250px);transform:rotate(1deg)}
 .touch-cluster button{
-  width:clamp(42px,7vw,58px);
-  height:clamp(42px,7vw,58px);
-  border:2px solid #b58a45;
-  border-radius:50%;
-  background:linear-gradient(#10241bd9,#06110ded);
-  color:#f7d58a;
-  font:bold clamp(11px,2vw,18px) ui-monospace,monospace;
-  box-shadow:inset 0 0 14px #000,0 3px 10px #000;
-  text-shadow:0 1px 0 #000;
+  position:relative;
+  width:clamp(38px,6.2vw,57px);
+  height:clamp(38px,6.2vw,57px);
+  border:1px solid #d0a657;
+  border-radius:13px 4px 13px 4px;
+  background:linear-gradient(145deg,#173225e8,#07110ded 55%,#020604f2);
+  color:#f4d791;
+  font:bold clamp(10px,1.75vw,16px) ui-monospace,monospace;
+  box-shadow:inset 0 0 0 1px #f1d17a22,inset 0 0 18px #000,0 4px 12px #000b,0 0 0 2px #06100caa;
+  text-shadow:0 1px 0 #000,0 0 8px #e7bd6855;
   user-select:none;
   -webkit-user-select:none;
   touch-action:none;
+  transition:transform .08s ease,box-shadow .08s ease,background .08s ease;
 }
-.touch-cluster button:nth-child(-n+3){border-color:#d29f4d}
-.touch-cluster button:nth-child(n+4):nth-child(-n+6){border-color:#4fae73;color:#9cf1b5}
-.touch-cluster button:nth-child(n+7){opacity:.86}
-.touch-cluster button:active,.touch-cluster button.active{
-  background:linear-gradient(#34754d,#153724);
-  transform:translateY(2px) scale(.97);
-  box-shadow:inset 0 0 14px #000,0 1px 4px #000,0 0 10px #64dc8877;
-}
-#orientation-hint{
-  position:absolute;
-  inset:0;
-  z-index:20;
-  display:none;
-  place-content:center;
-  gap:.5rem;
-  padding:2rem;
-  text-align:center;
-  background:#030807f2;
-  color:#f0d184;
-}
-#orientation-hint span{color:#9ec4a8;font:14px ui-monospace,monospace}
+.touch-cluster button::after{content:"";position:absolute;inset:4px;border:1px solid #e9c87822;border-radius:9px 2px 9px 2px;pointer-events:none}
+.touch-cluster button:nth-child(-n+3){border-color:#d7aa54;background:linear-gradient(145deg,#4d321be8,#160e08ed)}
+.touch-cluster button:nth-child(n+4):nth-child(-n+6){border-color:#5fcf88;color:#aaf1c0;background:linear-gradient(145deg,#19432ee8,#07150eed)}
+.touch-cluster button:nth-child(n+7){opacity:.9}
+.touch-cluster button:active,.touch-cluster button.active{background:linear-gradient(145deg,#3d8458,#183d29);transform:translateY(2px) scale(.96);box-shadow:inset 0 0 17px #000,0 1px 4px #000,0 0 17px #64dc8899;color:#fff1bc}
+#orientation-hint{position:absolute;inset:0;z-index:20;display:none;place-content:center;gap:.7rem;padding:2rem;text-align:center;background:radial-gradient(circle,#132a20,#020504f8 70%);color:#f0d184}
+#orientation-hint strong{font-size:clamp(22px,7vw,42px);font-weight:500;text-shadow:0 2px 0 #000,0 0 22px #e2bd6855}
+#orientation-hint strong::before{content:"卷";display:block;margin-bottom:.5rem;color:#a63b36;font-size:1.8em}
+#orientation-hint span{color:#9ec4a8;font:14px ui-monospace,monospace;letter-spacing:.06em}
 .assistive{position:absolute;left:-9999px}
-@media(pointer:coarse),(max-width:800px){#touch-controls{display:block}#game-shell{box-shadow:none}}
+@keyframes ambientSilk{from{transform:translate3d(-1%,0,0)}to{transform:translate3d(1.5%,-1%,0)}}
+@media(pointer:coarse),(max-width:800px){#touch-controls{display:block}#game-shell{width:100vw;height:56.25vw;max-height:100vh;box-shadow:none;border:0;clip-path:none}.actions{grid-template-columns:repeat(4,clamp(36px,5.8vw,48px))}body::after{display:none}}
 @media(pointer:coarse) and (orientation:portrait) and (max-width:900px){#orientation-hint{display:grid}}
-@media(max-height:430px){.touch-cluster{bottom:6px;gap:4px}.touch-cluster button{width:42px;height:42px;font-size:11px}}
-@media(prefers-reduced-motion:reduce){.loading-track i,.touch-cluster button{transition:none}}
+@media(max-height:430px){.touch-cluster{bottom:6px;gap:3px}.touch-cluster button{width:38px;height:38px;font-size:10px;border-radius:10px 3px 10px 3px}.actions{grid-template-columns:repeat(5,38px);max-width:205px}}
+@media(prefers-reduced-motion:reduce){body::before{animation:none}.loading-track i,.touch-cluster button{transition:none}}
