@@ -4,64 +4,48 @@ A web-first 2D wuxia action RPG combining free-roaming side-scrolling exploratio
 
 ## Playable build
 
-The current Act I build includes six connected locations, dialogue and investigation quests, recruitable allies, merchants, permanent training, collectible weapons, party assists, save migration and real-time martial-arts combat.
+The current Act I build includes six connected locations, main and side quests, five possible recruited allies, merchants, permanent training, collectible weapons, party assists, paid contracts, camp interactions, mastery progression, save migration and real-time martial-arts combat.
 
-## Progression and journey systems
+## Living world and party systems
 
-The latest systems pass adds:
+- Three authored side-quest chains introduce Razor Fang, Lotus, Hermit Reed and Jin’s journey beyond Shaolin.
+- Shi-An can assemble a full five-fighter companion roster.
+- A repeatable Jianghu Contract Board provides level-scaled missions, silver, XP and reputation.
+- Camp rest restores the party and grants a focused opening to the next duel.
+- Tea conversations build companion bonds; higher bonds improve assists and unlock character-specific support effects.
+- Weapon and fighting-style mastery grow through victories and improve combat statistics.
+- Common Folk, Shaolin, Wanderer and Merchant reputation records Shi-An’s standing in the jianghu.
+- Location discoveries, contract streaks and mastery are saved safely alongside existing version 3 data.
 
-- A persistent owned-weapon collection instead of repeatedly buying the same weapon
-- A dedicated Green Dragon Armory for comparing and equipping weapons
-- Selectable quest tracking with location and direction guidance on the exploration HUD
-- Automatic tracking when a new story quest becomes active
-- Disciple, Master and Legend difficulty settings
-- Screen-shake, screen-flash, dialogue-speed and high-contrast accessibility settings
-- Standard gamepad support for exploration, menus and combat
-- Style-specific Chi techniques, including Coiling Dragon Palm and Arhat Gate Breaker
-- Distinct Iron Bruiser, Shaolin Counter and Court Executioner enemy profiles
-- Safe enrichment of existing saves with the new settings, armory and quest data
+## Progression and accessibility
 
-## Combat and feel polish
+The build also includes a persistent armory, selectable quest tracking, directional objective guidance, Disciple/Master/Legend difficulty, screen-effect and text-speed controls, high contrast, gamepad support, style-specific Chi techniques and distinct rival combat profiles.
 
-The combat model includes:
+## Combat polish
 
-- Stamina, guard durability and guard breaks
-- Tap-block perfect parries
-- Buffered attacks for more responsive combinations
-- Evasive steps with short invulnerability
-- Throws that punish passive guarding
-- Weapon-specific reach and knockback
-- Hit-stop, screen shake, impact sparks and damage callouts
-- Combo grading and victory ranks
-- Experience rewards, level-ups and stat growth
-- Difficulty-scaled rivals and distinct boss pressure
+Combat includes stamina, guard breaks, tap-block parries, buffered attacks, evasions, throws, weapon reach, hit-stop, knockback, impact particles, floating callouts, combo grading, victory ranks, XP, levels and party assists.
 
-The presentation layer adds animated clouds, leaves, petals, lantern glow, water glints, improved HUD labels, quest/recruit/shop markers, safer scene transitions and a responsive twelve-button mobile action pad.
+## Web release features
 
-## Production artwork
-
-The game boots through a production asset layer that builds distinct fixed-grid animation atlases for Shi-An and seven named allies, rivals and bosses. Every named sheet shares the established 8×8 slicing contract while adding character-specific clothing, silhouettes, weapons and effects. The deterministic renderer remains available for secondary NPCs and automated tests.
-
-See [docs/PRODUCTION_ART.md](docs/PRODUCTION_ART.md), [docs/ASSET_PIPELINE.md](docs/ASSET_PIPELINE.md), [docs/POLISH.md](docs/POLISH.md) and [docs/JOURNEY_SYSTEMS.md](docs/JOURNEY_SYSTEMS.md).
+The static web build is installable and caches its core files through a versioned service worker for offline replay after the first successful load. GitHub Pages deployment is gated by automated asset, gameplay, systems and living-world validation.
 
 ## Controls
 
-- Move: WASD or arrow keys
+- Move: WASD or arrows
 - Interact/confirm: E or Enter
-- Journal/menu: M or Escape
+- Journal: M
 - Quest tracker: T
 - Armory: R
-- Options and accessibility: O
-- Punch / kick / weapon: J / K / L
-- Chi technique: I
-- Block; tap at impact to parry: S
-- Evade: Space
-- Throw / punish guard: U
+- Options/accessibility: O
+- Contract Board: B
+- Camp: C
+- Mastery and reputation: V
+- Combat: J punch, K kick, L weapon, I Chi, S block/parry, Space evade, U throw
 - Party assists: 1–4
 - Quick tonic: Q
 - Sound: P
 - Fullscreen: F
-- Gamepad: standard Xbox/PlayStation-style controllers supported
+- Standard browser gamepads are supported
 
 ## Validate
 
@@ -70,5 +54,6 @@ node tests/assets.mjs
 node tests/named-art.mjs
 node tests/polish.mjs
 node tests/systems.mjs
+node tests/living-world.mjs
 node tests/smoke.mjs
 ```

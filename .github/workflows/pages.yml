@@ -24,6 +24,10 @@ jobs:
         run: node tests/polish.mjs
       - name: Validate progression, quest and accessibility systems
         run: node tests/systems.mjs
+      - name: Validate living world wiring and offline cache
+        run: node tests/living-world.mjs static
+      - name: Validate living world runtime behaviour
+        run: node tests/living-world.mjs runtime
       - name: Validate JavaScript game systems
         run: node tests/smoke.mjs
   deploy:
@@ -38,7 +42,7 @@ jobs:
       - name: Assemble static game
         run: |
           mkdir -p _site
-          cp index.html styles.css manifest.webmanifest _site/
+          cp index.html styles.css manifest.webmanifest sw.js _site/
           cp -R src assets _site/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

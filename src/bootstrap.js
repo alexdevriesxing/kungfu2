@@ -24,3 +24,8 @@ try{
 await new Promise(resolve=>setTimeout(resolve,60));
 await import('./game.js');
 await import('./enhancements.js');
+await import('./world-systems.js');
+
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
+  navigator.serviceWorker.register('./sw.js').catch(error=>console.warn('Offline cache unavailable',error));
+}
