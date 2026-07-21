@@ -30,8 +30,14 @@ jobs:
         run: node tests/living-world.mjs runtime
       - name: Validate Act II wiring and offline cache
         run: node tests/act-two.mjs static
-      - name: Validate Act II unlock state
-        run: node tests/act-two.mjs unlock-state
+      - name: Validate Act II module API
+        run: node tests/act-two.mjs module
+      - name: Validate Act II fresh-save enrichment
+        run: node tests/act-two.mjs fresh-save
+      - name: Validate Act II unlock flag
+        run: node tests/act-two.mjs unlock-flag
+      - name: Validate Act II travel handoff
+        run: node tests/act-two.mjs unlock-location
       - name: Validate Act II region installation
         run: node tests/act-two.mjs regions
       - name: Validate Act II opening quest activation
