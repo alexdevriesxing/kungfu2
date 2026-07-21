@@ -8,8 +8,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  issues: write
-  pull-requests: write
 concurrency:
   group: pages-${{ github.ref }}
   cancel-in-progress: true
@@ -38,15 +36,18 @@ jobs:
         id: act2debug
         continue-on-error: true
         run: node tests/act-two-debug.mjs
-      - name: Post Act II diagnostic to pull request
-        if: steps.act2debug.outcome == 'failure' && github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          printf '### Act II initialization diagnostic\n\n```text\n' > act-two-comment.md
-          cat act-two-debug.txt >> act-two-comment.md
-          printf '\n```\n' >> act-two-comment.md
-          gh pr comment "${{ github.event.pull_request.number }}" --body-file act-two-comment.md
+      - name: Diagnostic indicates TypeError
+        if: steps.act2debug.outcome == 'failure'
+        run: "! grep -q 'TypeError' act-two-debug.txt"
+      - name: Diagnostic indicates ReferenceError
+        if: steps.act2debug.outcome == 'failure'
+        run: "! grep -q 'ReferenceError' act-two-debug.txt"
+      - name: Diagnostic indicates RangeError
+        if: steps.act2debug.outcome == 'failure'
+        run: "! grep -q 'RangeError' act-two-debug.txt"
+      - name: Diagnostic indicates unpublished API
+        if: steps.act2debug.outcome == 'failure'
+        run: "! grep -q 'without publishing its API' act-two-debug.txt"
       - name: Require Act II initialization
         if: always()
         run: test "${{ steps.act2debug.outcome }}" = "success"
