@@ -63,13 +63,33 @@ Combat includes stamina, guard breaks, tap-block parries, buffered attacks, evas
 
 Late-campaign and Legacy encounters add faction bonuses, ending inheritance, multi-phase bosses, cycle ranks and escalating enemy attributes.
 
+## Premium wuxia presentation
+
+The complete game now uses a unified cinematic wuxia art direction rather than a collection of plain utility screens.
+
+- Ink-wash mountain depth and atmospheric stage glazing
+- Location-aware blossom, leaf, snow, ash, silk, ember and jade ambience
+- Animated rice-paper grain and subtle color grading
+- Cinnabar seal marks and jade-and-gold ornamental framing
+- Lacquered clipped-corner HUD, menu and dialogue panels
+- Layered enamel HP, Chi, stamina and guard bars
+- Richer fallback villages, rivers, temples, bamboo forests and mountain stages
+- Cinematic boss and rival name-card entrances
+- Brush-wipe travel transitions
+- Act-completion scroll banners
+- Victory-rank seals
+- Expanded title composition with calligraphy, enso rings and bilingual wuxia titling
+- Premium responsive shell and four-column mobile combat pad
+
+Existing authored stages are enriched in place, preserving their composition while adding depth, atmosphere and foreground framing.
+
 ## Production presentation
 
 Named fighters use fixed-grid animation atlases. Acts II–IV and Legacy Journey add dedicated rival variants and authored runtime pixel-art stages routed through the production-stage interface. The deterministic renderer remains available for secondary NPCs and validation.
 
 ## Web release
 
-The game is installable as a landscape progressive web app. `sw-legacy.js` provides a versioned offline cache for the complete campaign and postgame executable core after the first successful load.
+The game is installable as a landscape progressive web app. `sw-legacy.js` provides a versioned offline cache for the complete campaign, postgame and presentation executable core after the first successful load.
 
 ## Controls
 
@@ -94,6 +114,7 @@ The game is installable as a landscape progressive web app. `sw-legacy.js` provi
 
 ## Documentation
 
+- [Wuxia presentation](docs/WUXIA_PRESENTATION.md)
 - [Legacy Journey](docs/LEGACY_JOURNEY.md)
 - [Act IV campaign](docs/ACT_FOUR.md)
 - [Act III campaign](docs/ACT_THREE.md)
@@ -121,5 +142,7 @@ node tests/act-four.mjs static
 node tests/act-four.mjs runtime
 node tests/legacy-journey.mjs static
 node tests/legacy-journey.mjs runtime
+node tests/wuxia-presentation.mjs static
+node tests/wuxia-presentation.mjs runtime
 node tests/smoke.mjs
 ```
