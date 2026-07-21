@@ -30,7 +30,13 @@ jobs:
         run: node tests/living-world.mjs runtime
       - name: Validate Act II wiring and offline cache
         run: node tests/act-two.mjs static
-      - name: Validate Act II story runtime
+      - name: Validate Act II Black River chapter
+        run: node tests/act-two.mjs river
+      - name: Validate Act II Ghost Face Opera chapter
+        run: node tests/act-two.mjs opera
+      - name: Validate Act II Five-Clan Council chapter
+        run: node tests/act-two.mjs council
+      - name: Validate Act II tournament and Jade Court finale
         run: node tests/act-two.mjs runtime
       - name: Validate JavaScript game systems
         run: node tests/smoke.mjs
