@@ -30,6 +30,8 @@ jobs:
         run: node tests/living-world.mjs runtime
       - name: Validate Act II wiring and offline cache
         run: node tests/act-two.mjs static
+      - name: Validate Act II JavaScript syntax
+        run: node --check src/act-two.js
       - name: Validate Act II module API
         run: node tests/act-two.mjs module
       - name: Validate Act II fresh-save enrichment
