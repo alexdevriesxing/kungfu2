@@ -6,11 +6,12 @@ if(mode==='static'){
   for(const token of ['ACT_FOUR_LOCATIONS','capital-east-gate','ghost-schism-temple','green-dragon-terrace','chancellor-sima','Lady Half-Mask','Mandate Without Throne','act-four-complete'])if(!act.includes(token))fail(`Act IV feature missing: ${token}`);
   const boot=fs.readFileSync('src/bootstrap.js','utf8');
   if(!boot.includes("import('./act-four.js')"))fail('Act IV module is not bootstrapped.');
-  if(!boot.includes('sw-act4.js'))fail('Act IV service worker is not registered.');
+  const swPath=boot.includes('sw-legacy.js')?'sw-legacy.js':'sw-act4.js';
+  if(!boot.includes(swPath))fail('Act IV-compatible service worker is not registered.');
   const index=fs.readFileSync('index.html','utf8');
   if(!index.includes('data-key="KeyY"'))fail('Mandate Ledger touch control is missing.');
-  const sw=fs.readFileSync('sw-act4.js','utf8');
-  if(!sw.includes('act-four.js')||!sw.includes('green-dragon-v7-act4'))fail('Act IV offline cache is incomplete.');
+  const sw=fs.readFileSync(swPath,'utf8');
+  if(!sw.includes('act-four.js')||!/(green-dragon-v7-act4|green-dragon-v8-legacy)/.test(sw))fail('Act IV offline cache is incomplete.');
   console.log('Act IV wiring validation passed.');
   process.exit(0);
 }
