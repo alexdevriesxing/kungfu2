@@ -32,9 +32,11 @@ const finishPhase=phase=>{if(mode===phase){console.log(`Act II ${phase} validati
 
 game.newGame();game.data.quests.faceless='completed';api.unlockActTwo(game,true);
 check('act two unlock',game.data.actTwo.unlocked&&game.data.location==='black-river-docks');
+finishPhase('unlock-state');
 check('eight new regions',LOCATIONS.length>=14&&LOCATIONS.some(item=>item.id==='imperial-jade-court'));
+finishPhase('regions');
 check('opening quest',game.data.quests['black-river-summons']==='active');
-finishPhase('unlock');
+finishPhase('opening');
 
 game.afterTalk(find('captain-yan'));
 check('captain advances story',game.data.quests['broken-escort-seal']==='active');
