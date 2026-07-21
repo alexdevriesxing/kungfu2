@@ -54,6 +54,30 @@ jobs:
         run: node tests/act-two.mjs council
       - name: Validate Act II tournament and Jade Court finale
         run: node tests/act-two.mjs runtime
+      - name: Validate Act III wiring and offline cache
+        run: node tests/act-three.mjs static
+      - name: Validate Act III JavaScript module
+        run: node --check src/act-three.js
+      - name: Validate Act III module API
+        run: node tests/act-three.mjs module
+      - name: Validate Act III fresh-save enrichment
+        run: node tests/act-three.mjs fresh-save
+      - name: Validate Act III unlock and northern road
+        run: node tests/act-three.mjs unlock
+      - name: Validate Act III region installation
+        run: node tests/act-three.mjs regions
+      - name: Validate Act III Iron Prayer chapter
+        run: node tests/act-three.mjs monastery
+      - name: Validate Act III Snow Lotus chapter
+        run: node tests/act-three.mjs village
+      - name: Validate Act III three standards
+        run: node tests/act-three.mjs standards
+      - name: Validate Act III Ghost Face founder
+        run: node tests/act-three.mjs founder
+      - name: Validate Act III vanished heir
+        run: node tests/act-three.mjs heir
+      - name: Validate Act III constellation and regent finale
+        run: node tests/act-three.mjs runtime
       - name: Validate JavaScript game systems
         run: node tests/smoke.mjs
   deploy:
@@ -68,7 +92,7 @@ jobs:
       - name: Assemble static game
         run: |
           mkdir -p _site
-          cp index.html styles.css manifest.webmanifest sw.js sw-act2.js _site/
+          cp index.html styles.css manifest.webmanifest sw.js sw-act2.js sw-act3.js _site/
           cp -R src assets _site/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
